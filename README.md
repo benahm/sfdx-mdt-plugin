@@ -55,7 +55,7 @@ OPTIONS
 
 EXAMPLE
   $ sfdx mdt:customlabels:compose -p {sourcepath} -d {outputdirectory}
-     Compose multiple custom label file into the Custom Label xml file in order to deploy
+     Compose multiple custom label files into a Custom Label xml file
 ```
 
 _See code: [lib\commands\mdt\customlabels\compose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.1/lib\commands\mdt\customlabels\compose.js)_
@@ -80,7 +80,7 @@ OPTIONS
 
 EXAMPLE
   $ sfdx mdt:customlabels:decompose -p {sourcepath} -d {outputdirectory}
-     Decompose Custom Labels xml file to multiple files in order to easily manage custom labels using git
+     Decompose Custom Labels xml file to multiple custom label files
 ```
 
 _See code: [lib\commands\mdt\customlabels\decompose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.1/lib\commands\mdt\customlabels\decompose.js)_
@@ -105,7 +105,7 @@ OPTIONS
 
 EXAMPLE
   $ sfdx mdt:profile:compose -p {sourcepath} -d {outputdirectory}
-     Compose multiple custom label file into the Custom Label xml file in order to deploy
+     Compose multiple profile access files into the Profile xml file
 ```
 
 _See code: [lib\commands\mdt\profile\compose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.1/lib\commands\mdt\profile\compose.js)_
@@ -128,13 +128,9 @@ OPTIONS
   --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
                                                                                     this command invocation
 
-EXAMPLES
+EXAMPLE
   $ sfdx mdt:profile:decompose -p {sourcepath} -d {outputdirectory}
-     Hello world! This is org: MyOrg and I will be around until Tue Mar 20 2018!
-     My hub org id is: 00Dxx000000001234
-  
-  $ sfdx hello:org --name myname --targetusername myOrg@example.com
-     Hello myname! This is org: MyOrg and I will be around until Tue Mar 20 2018!
+       Decompose Profile xml file to multiple profile access files
 ```
 
 _See code: [lib\commands\mdt\profile\decompose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.1/lib\commands\mdt\profile\decompose.js)_
