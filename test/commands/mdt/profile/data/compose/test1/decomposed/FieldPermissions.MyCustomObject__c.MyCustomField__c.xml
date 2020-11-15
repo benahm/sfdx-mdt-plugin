@@ -1,0 +1,5 @@
+<fieldPermissions>
+    <editable>false</editable>
+    <field>MyCustomObject__c.MyCustomField__c</field>
+    <readable>false</readable>
+</fieldPermissions>

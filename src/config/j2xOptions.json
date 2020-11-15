@@ -1,0 +1,11 @@
+{
+  "attributeNamePrefix": "",
+  "attrNodeName": "@",
+  "textNodeName": "#text",
+  "ignoreAttributes": false,
+  "cdataTagName": "__cdata",
+  "cdataPositionChar": "\\c",
+  "format": true,
+  "indentBy": "    ",
+  "supressEmptyNode": false
+}

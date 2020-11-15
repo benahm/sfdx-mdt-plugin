@@ -1,0 +1,16 @@
+{
+  "attributeNamePrefix":"",
+  "attrNodeName":"@",
+  "textNodeName":"#text",
+  "ignoreAttributes":false,
+  "ignoreNameSpace":false,
+  "allowBooleanAttributes":false,
+  "parseNodeValue":true,
+  "parseAttributeValue":false,
+  "trimValues":true,
+  "cdataTagName":"__cdata",
+  "cdataPositionChar":"\\c",
+  "parseTrueNumberOnly":false,
+  "arrayMode":false,
+  "stopNodes":["parse-me-as-string"]
+}
