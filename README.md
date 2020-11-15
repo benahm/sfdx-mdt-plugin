@@ -1,16 +1,16 @@
-mdtutil
+sfdx-mdt-plugin
 =======
 
 Metadata Util
 
-[![Version](https://img.shields.io/npm/v/mdtutil.svg)](https://npmjs.org/package/mdtutil)
-[![CircleCI](https://circleci.com/gh/Repositories/mdtutil/tree/master.svg?style=shield)](https://circleci.com/gh/Repositories/mdtutil/tree/master)
-[![Appveyor CI](https://ci.appveyor.com/api/projects/status/github/Repositories/mdtutil?branch=master&svg=true)](https://ci.appveyor.com/project/heroku/mdtutil/branch/master)
-[![Codecov](https://codecov.io/gh/Repositories/mdtutil/branch/master/graph/badge.svg)](https://codecov.io/gh/Repositories/mdtutil)
-[![Greenkeeper](https://badges.greenkeeper.io/Repositories/mdtutil.svg)](https://greenkeeper.io/)
-[![Known Vulnerabilities](https://snyk.io/test/github/Repositories/mdtutil/badge.svg)](https://snyk.io/test/github/Repositories/mdtutil)
-[![Downloads/week](https://img.shields.io/npm/dw/mdtutil.svg)](https://npmjs.org/package/mdtutil)
-[![License](https://img.shields.io/npm/l/mdtutil.svg)](https://github.com/Repositories/mdtutil/blob/master/package.json)
+[![Version](https://img.shields.io/npm/v/sfdx-mdt-plugin.svg)](https://npmjs.org/package/sfdx-mdt-plugin)
+[![CircleCI](https://circleci.com/gh/Repositories/sfdx-mdt-plugin/tree/master.svg?style=shield)](https://circleci.com/gh/Repositories/sfdx-mdt-plugin/tree/master)
+[![Appveyor CI](https://ci.appveyor.com/api/projects/status/github/Repositories/sfdx-mdt-plugin?branch=master&svg=true)](https://ci.appveyor.com/project/heroku/sfdx-mdt-plugin/branch/master)
+[![Codecov](https://codecov.io/gh/Repositories/sfdx-mdt-plugin/branch/master/graph/badge.svg)](https://codecov.io/gh/Repositories/sfdx-mdt-plugin)
+[![Greenkeeper](https://badges.greenkeeper.io/Repositories/sfdx-mdt-plugin.svg)](https://greenkeeper.io/)
+[![Known Vulnerabilities](https://snyk.io/test/github/Repositories/sfdx-mdt-plugin/badge.svg)](https://snyk.io/test/github/Repositories/sfdx-mdt-plugin)
+[![Downloads/week](https://img.shields.io/npm/dw/sfdx-mdt-plugin.svg)](https://npmjs.org/package/sfdx-mdt-plugin)
+[![License](https://img.shields.io/npm/l/sfdx-mdt-plugin.svg)](https://github.com/Repositories/sfdx-mdt-plugin/blob/master/package.json)
 
 <!-- toc -->
 * [Debugging your plugin](#debugging-your-plugin)
@@ -18,11 +18,11 @@ Metadata Util
 <!-- install -->
 <!-- usage -->
 ```sh-session
-$ npm install -g mdtutil
+$ npm install -g sfdx-mdt-plugin
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-mdtutil/0.0.0 win32-x64 node-v12.14.1
+sfdx-mdt-plugin/0.0.0 win32-x64 node-v12.14.1
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -54,7 +54,7 @@ OPTIONS
                                                                                     this command invocation
 
 EXAMPLE
-  $ sfdx mdtutil:customlabels:compose -p {sourcepath} -d {outputdirectory}
+  $ sfdx mdt:customlabels:compose -p {sourcepath} -d {outputdirectory}
      Compose multiple custom label file into the Custom Label xml file in order to deploy
 ```
 
@@ -79,7 +79,7 @@ OPTIONS
                                                                                     this command invocation
 
 EXAMPLE
-  $ sfdx mdtutil:customlabels:decompose -p {sourcepath} -d {outputdirectory}
+  $ sfdx mdt:customlabels:decompose -p {sourcepath} -d {outputdirectory}
      Decompose Custom Labels xml file to multiple files in order to easily manage custom labels using git
 ```
 
@@ -104,7 +104,7 @@ OPTIONS
                                                                                     this command invocation
 
 EXAMPLE
-  $ sfdx mdtutil:profile:compose -p {sourcepath} -d {outputdirectory}
+  $ sfdx mdt:profile:compose -p {sourcepath} -d {outputdirectory}
      Compose multiple custom label file into the Custom Label xml file in order to deploy
 ```
 
@@ -129,7 +129,7 @@ OPTIONS
                                                                                     this command invocation
 
 EXAMPLES
-  $ sfdx mdtutil:profile:decompose -p {sourcepath} -d {outputdirectory}
+  $ sfdx mdt:profile:decompose -p {sourcepath} -d {outputdirectory}
      Hello world! This is org: MyOrg and I will be around until Tue Mar 20 2018!
      My hub org id is: 00Dxx000000001234
   

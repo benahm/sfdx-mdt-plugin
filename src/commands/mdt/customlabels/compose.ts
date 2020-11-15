@@ -10,7 +10,7 @@ import * as x2jOptions from "../../../config/x2jOptions.json";
 
 export default class Composer extends SfdxCommand {
   public static examples = [
-    `$ sfdx mdtutil:customlabels:compose -p {sourcepath} -d {outputdirectory}
+    `$ sfdx mdt:customlabels:compose -p {sourcepath} -d {outputdirectory}
   Compose multiple custom label file into the Custom Label xml file in order to deploy
   `,
   ];

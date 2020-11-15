@@ -1,9 +1,9 @@
 {
-  "name": "mdtutil",
-  "description": "Metadata Util",
+  "name": "sfdx-mdt-plugin",
+  "description": "Sfdx metadata plugin",
   "version": "0.0.0",
   "author": "benahm",
-  "bugs": "https://github.com/Repositories/mdtutil/issues",
+  "bugs": "https://github.com/Repositories/sfdx-mdt-plugin/issues",
   "dependencies": {
     "@oclif/command": "^1",
     "@oclif/config": "^1",
@@ -40,7 +40,7 @@
     "/npm-shrinkwrap.json",
     "/oclif.manifest.json"
   ],
-  "homepage": "https://github.com/Repositories/mdtutil",
+  "homepage": "https://github.com/Repositories/sfdx-mdt-plugin",
   "keywords": [
     "sfdx-plugin"
   ],

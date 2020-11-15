@@ -14,7 +14,7 @@ import * as x2jOptions from "../../../config/x2jOptions.json";
 
 export default class Decomposer extends SfdxCommand {
   public static examples = [
-    `$ sfdx mdtutil:profile:decompose -p {sourcepath} -d {outputdirectory}
+    `$ sfdx mdt:profile:decompose -p {sourcepath} -d {outputdirectory}
   Hello world! This is org: MyOrg and I will be around until Tue Mar 20 2018!
   My hub org id is: 00Dxx000000001234
   `,
