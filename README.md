@@ -1,7 +1,7 @@
 sfdx-mdt-plugin
 =======
 
-Metadata Util
+sfdx metadata plugin
 
 [![Version](https://img.shields.io/npm/v/sfdx-mdt-plugin.svg)](https://npmjs.org/package/sfdx-mdt-plugin)
 [![CircleCI](https://circleci.com/gh/Repositories/sfdx-mdt-plugin/tree/master.svg?style=shield)](https://circleci.com/gh/Repositories/sfdx-mdt-plugin/tree/master)
@@ -13,7 +13,7 @@ Metadata Util
 [![License](https://img.shields.io/npm/l/sfdx-mdt-plugin.svg)](https://github.com/Repositories/sfdx-mdt-plugin/blob/master/package.json)
 
 <!-- toc -->
-* [Debugging your plugin](#debugging-your-plugin)
+
 <!-- tocstop -->
 <!-- install -->
 <!-- usage -->
@@ -22,7 +22,7 @@ $ npm install -g sfdx-mdt-plugin
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-sfdx-mdt-plugin/0.0.0 win32-x64 node-v12.14.1
+sfdx-mdt-plugin/0.0.1 win32-x64 node-v12.14.1
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -58,7 +58,7 @@ EXAMPLE
      Compose multiple custom label file into the Custom Label xml file in order to deploy
 ```
 
-_See code: [lib\commands\mdt\customlabels\compose.js](https://github.com/Repositories/mdt/blob/v0.0.0/lib\commands\mdt\customlabels\compose.js)_
+_See code: [lib\commands\mdt\customlabels\compose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.1/lib\commands\mdt\customlabels\compose.js)_
 
 ## `sfdx mdt:customlabels:decompose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -83,7 +83,7 @@ EXAMPLE
      Decompose Custom Labels xml file to multiple files in order to easily manage custom labels using git
 ```
 
-_See code: [lib\commands\mdt\customlabels\decompose.js](https://github.com/Repositories/mdt/blob/v0.0.0/lib\commands\mdt\customlabels\decompose.js)_
+_See code: [lib\commands\mdt\customlabels\decompose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.1/lib\commands\mdt\customlabels\decompose.js)_
 
 ## `sfdx mdt:profile:compose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -108,7 +108,7 @@ EXAMPLE
      Compose multiple custom label file into the Custom Label xml file in order to deploy
 ```
 
-_See code: [lib\commands\mdt\profile\compose.js](https://github.com/Repositories/mdt/blob/v0.0.0/lib\commands\mdt\profile\compose.js)_
+_See code: [lib\commands\mdt\profile\compose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.1/lib\commands\mdt\profile\compose.js)_
 
 ## `sfdx mdt:profile:decompose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -137,29 +137,6 @@ EXAMPLES
      Hello myname! This is org: MyOrg and I will be around until Tue Mar 20 2018!
 ```
 
-_See code: [lib\commands\mdt\profile\decompose.js](https://github.com/Repositories/mdt/blob/v0.0.0/lib\commands\mdt\profile\decompose.js)_
+_See code: [lib\commands\mdt\profile\decompose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.1/lib\commands\mdt\profile\decompose.js)_
 <!-- commandsstop -->
 <!-- debugging-your-plugin -->
-# Debugging your plugin
-We recommend using the Visual Studio Code (VS Code) IDE for your plugin development. Included in the `.vscode` directory of this plugin is a `launch.json` config file, which allows you to attach a debugger to the node process when running your commands.
-
-To debug the `hello:org` command: 
-1. Start the inspector
-  
-If you linked your plugin to the sfdx cli, call your command with the `dev-suspend` switch: 
-```sh-session
-$ sfdx hello:org -u myOrg@example.com --dev-suspend
-```
-  
-Alternatively, to call your command using the `bin/run` script, set the `NODE_OPTIONS` environment variable to `--inspect-brk` when starting the debugger:
-```sh-session
-$ NODE_OPTIONS=--inspect-brk bin/run hello:org -u myOrg@example.com
-```
-
-2. Set some breakpoints in your command code
-3. Click on the Debug icon in the Activity Bar on the side of VS Code to open up the Debug view.
-4. In the upper left hand corner of VS Code, verify that the "Attach to Remote" launch configuration has been chosen.
-5. Hit the green play button to the left of the "Attach to Remote" launch configuration window. The debugger should now be suspended on the first line of the program. 
-6. Hit the green play button at the top middle of VS Code (this play button will be to the right of the play button that you clicked in step #5).
-<br><img src=".images/vscodeScreenshot.png" width="480" height="278"><br>
-Congrats, you are debugging!

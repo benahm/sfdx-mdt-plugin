@@ -56,9 +56,14 @@ const capitalizeFirstLetter = (string) =>
 
 /**
  * Uncapitalize first letter of a string
- * @param string 
+ * @param string
  */
 const uncapitalizeFirstLetter = (string) =>
   string.charAt(0).toLowerCase() + string.slice(1);
 
-export { profileAccessNameMap, substringBefore, capitalizeFirstLetter, uncapitalizeFirstLetter };
+export {
+  profileAccessNameMap,
+  substringBefore,
+  capitalizeFirstLetter,
+  uncapitalizeFirstLetter,
+};

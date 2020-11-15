@@ -15,11 +15,7 @@ import * as x2jOptions from "../../../config/x2jOptions.json";
 export default class Decomposer extends SfdxCommand {
   public static examples = [
     `$ sfdx mdt:profile:decompose -p {sourcepath} -d {outputdirectory}
-  Hello world! This is org: MyOrg and I will be around until Tue Mar 20 2018!
-  My hub org id is: 00Dxx000000001234
-  `,
-    `$ sfdx hello:org --name myname --targetusername myOrg@example.com
-  Hello myname! This is org: MyOrg and I will be around until Tue Mar 20 2018!
+    Decompose Profile xml file to multiple profile access files
   `,
   ];
 

@@ -11,7 +11,7 @@ import * as x2jOptions from "../../../config/x2jOptions.json";
 export default class Decomposer extends SfdxCommand {
   public static examples = [
     `$ sfdx mdt:customlabels:decompose -p {sourcepath} -d {outputdirectory}
-  Decompose Custom Labels xml file to multiple files in order to easily manage custom labels using git
+  Decompose Custom Labels xml file to multiple custom label files
   `,
   ];
 

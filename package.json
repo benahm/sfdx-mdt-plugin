@@ -1,9 +1,9 @@
 {
   "name": "sfdx-mdt-plugin",
   "description": "Sfdx metadata plugin",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "benahm",
-  "bugs": "https://github.com/Repositories/sfdx-mdt-plugin/issues",
+  "bugs": "https://github.com/benahm/sfdx-mdt-plugin/issues",
   "dependencies": {
     "@oclif/command": "^1",
     "@oclif/config": "^1",
@@ -40,7 +40,7 @@
     "/npm-shrinkwrap.json",
     "/oclif.manifest.json"
   ],
-  "homepage": "https://github.com/Repositories/sfdx-mdt-plugin",
+  "homepage": "https://github.com/benahm/sfdx-mdt-plugin",
   "keywords": [
     "sfdx-plugin"
   ],
@@ -57,7 +57,7 @@
       "@oclif/plugin-help"
     ]
   },
-  "repository": "Repositories/mdt",
+  "repository": "https://github.com/benahm/sfdx-mdt-plugin",
   "scripts": {
     "lint": "tslint --project . --config tslint.json --format stylish",
     "postpack": "rimraf oclif.manifest.json",
