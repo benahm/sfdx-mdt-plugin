@@ -8,6 +8,7 @@ import { j2xParser } from "fast-xml-parser";
 import {
   substringBefore,
   uncapitalizeFirstLetter,
+  profileAccessFilenamesCompare,
 } from "../../../utils/utilities";
 import * as j2xOptions from "../../../config/j2xOptions.json";
 import * as x2jOptions from "../../../config/x2jOptions.json";
@@ -59,7 +60,9 @@ export default class Composer extends SfdxCommand {
         applicationVisibilities: [],
       },
     };
-    for (const profileAccessFileName of profileDir.sort()) {
+    for (const profileAccessFileName of profileDir.sort(
+      profileAccessFilenamesCompare
+    )) {
       let profileAccessXMLData = await fs.readFileSync(
         inputdir + "/" + profileAccessFileName,
         {
