@@ -47,5 +47,11 @@ describe("utility tests", () => {
         "LayoutAssignments.Layout2.recordType2"
       )
     ).equal(-1);
+    expect(
+      profileAccessFilenamesCompare(
+        "LayoutAssignments.LayoutA.recordTypeA",
+        "LayoutAssignments.LayoutAb.recordTypeA"
+      )
+    ).equal(-1);
   });
 });

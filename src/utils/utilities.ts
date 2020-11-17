@@ -45,20 +45,23 @@ const profileAccessFilenamesCompare = (fileName1, fileName2) => {
       const fileName1Parts = fileName1.split(".");
       const fileName2Parts = fileName2.split(".");
 
+      const layoutName1 = substringBefore(substringAfter(fileName1, "."), ".");
+      const layoutName2 = substringBefore(substringAfter(fileName2, "."), ".");
+
       if (fileName1Parts.length !== fileName2Parts.length) {
-        const layoutName1 = substringBefore(
-          substringAfter(fileName1, "."),
-          "."
-        );
-        const layoutName2 = substringBefore(
-          substringAfter(fileName2, "."),
-          "."
-        );
         if (layoutName1 === layoutName2) {
           return fileName1Parts.length > fileName2Parts.length ? 1 : -1;
         }
         return layoutName1 > layoutName2 ? 1 : -1;
       } else {
+        if (layoutName1 !== layoutName2) {
+          if (layoutName1.startsWith(layoutName2)) {
+            return 1;
+          }
+          if (layoutName2.startsWith(layoutName1)) {
+            return -1;
+          }
+        }
         return fileName1 > fileName2 ? 1 : -1;
       }
       break;
