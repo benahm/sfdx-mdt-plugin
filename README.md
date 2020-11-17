@@ -22,7 +22,7 @@ $ npm install -g sfdx-mdt-plugin
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-sfdx-mdt-plugin/0.0.1 win32-x64 node-v12.14.1
+sfdx-mdt-plugin/0.0.2 win32-x64 node-v12.14.1
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -58,7 +58,7 @@ EXAMPLE
      Compose multiple custom label files into a Custom Label xml file
 ```
 
-_See code: [lib\commands\mdt\customlabels\compose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.1/lib\commands\mdt\customlabels\compose.js)_
+_See code: [lib\commands\mdt\customlabels\compose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.2/lib\commands\mdt\customlabels\compose.js)_
 
 ## `sfdx mdt:customlabels:decompose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -83,7 +83,7 @@ EXAMPLE
      Decompose Custom Labels xml file to multiple custom label files
 ```
 
-_See code: [lib\commands\mdt\customlabels\decompose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.1/lib\commands\mdt\customlabels\decompose.js)_
+_See code: [lib\commands\mdt\customlabels\decompose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.2/lib\commands\mdt\customlabels\decompose.js)_
 
 ## `sfdx mdt:profile:compose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -108,7 +108,7 @@ EXAMPLE
      Compose multiple profile access files into the Profile xml file
 ```
 
-_See code: [lib\commands\mdt\profile\compose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.1/lib\commands\mdt\profile\compose.js)_
+_See code: [lib\commands\mdt\profile\compose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.2/lib\commands\mdt\profile\compose.js)_
 
 ## `sfdx mdt:profile:decompose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -133,6 +133,6 @@ EXAMPLE
        Decompose Profile xml file to multiple profile access files
 ```
 
-_See code: [lib\commands\mdt\profile\decompose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.1/lib\commands\mdt\profile\decompose.js)_
+_See code: [lib\commands\mdt\profile\decompose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.2/lib\commands\mdt\profile\decompose.js)_
 <!-- commandsstop -->
 <!-- debugging-your-plugin -->
