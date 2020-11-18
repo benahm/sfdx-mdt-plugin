@@ -60,6 +60,11 @@ export default class Composer extends SfdxCommand {
         applicationVisibilities: [],
       },
     };
+
+    if (!fs.existsSync(inputdir)) {
+      throw `${inputdir} does not exists`;
+    }
+
     for (const profileAccessFileName of profileDir.sort(
       profileAccessFilenamesCompare
     )) {

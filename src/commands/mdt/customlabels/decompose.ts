@@ -46,6 +46,11 @@ export default class Decomposer extends SfdxCommand {
       encoding: "utf8",
     });
 
+    // create output dir if it does not exits
+    if (!fs.existsSync(outputdir)) {
+      await fs.mkdirSync(outputdir);
+    }
+
     if (x2jParser.validate(xmlData) === true) {
       // parse xml to json
       const jsonObj = x2jParser.parse(xmlData, x2jOptions);

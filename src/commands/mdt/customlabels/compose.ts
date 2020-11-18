@@ -55,6 +55,11 @@ export default class Composer extends SfdxCommand {
         labels: [],
       },
     };
+
+    if (!fs.existsSync(inputdir)) {
+      throw `${inputdir} does not exists`;
+    }
+
     for (const customLabelFile of customLabelsDir.sort()) {
       let xmlData = await fs.readFileSync(inputdir + "/" + customLabelFile, {
         encoding: "utf8",
