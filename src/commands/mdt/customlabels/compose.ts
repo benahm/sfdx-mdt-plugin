@@ -31,7 +31,7 @@ export default class Composer extends SfdxCommand {
     this.ux.startSpinner(chalk.yellowBright("Composing Custom Labels"));
 
     try {
-      this.compose(this.flags.sourcepath, this.flags.inputdir);
+      await this.compose(this.flags.sourcepath, this.flags.inputdir);
     } catch (e) {
       // output error
       this.ux.stopSpinner("❌");
@@ -45,9 +45,9 @@ export default class Composer extends SfdxCommand {
   }
 
   public async compose(sourcepath, inputdir) {
-    let customLabelsDir = await fs.readdirSync(inputdir);
-    let json2xmlParser = new j2xParser(j2xOptions);
-    let customLabelsJSON = {
+    const customLabelsDir = await fs.readdirSync(inputdir);
+    const json2xmlParser = new j2xParser(j2xOptions);
+    const customLabelsJSON = {
       CustomLabels: {
         "@": {
           xmlns: "http://soap.sforce.com/2006/04/metadata",
@@ -68,7 +68,7 @@ export default class Composer extends SfdxCommand {
     }
 
     // parse json to xml
-    let formattedXml = json2xmlParser.parse(customLabelsJSON);
+    const formattedXml = json2xmlParser.parse(customLabelsJSON);
 
     // write xml version & encoding
     await fs.writeFileSync(

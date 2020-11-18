@@ -48,7 +48,7 @@ export default class Decomposer extends SfdxCommand {
   }
 
   public async decompose(sourcepath, outputdir) {
-    let profileXMLData = await fs.readFileSync(sourcepath, {
+    const profileXMLData = await fs.readFileSync(sourcepath, {
       encoding: "utf8",
     });
 

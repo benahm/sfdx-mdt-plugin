@@ -36,7 +36,7 @@ export default class Composer extends SfdxCommand {
     this.ux.startSpinner(chalk.yellowBright("Composing Profile"));
 
     try {
-      this.compose(this.flags.sourcepath, this.flags.inputdir);
+      await this.compose(this.flags.sourcepath, this.flags.inputdir);
     } catch (e) {
       // output error
       this.ux.stopSpinner("❌");
@@ -50,9 +50,9 @@ export default class Composer extends SfdxCommand {
   }
 
   public async compose(sourcepath, inputdir) {
-    let profileDir = await fs.readdirSync(inputdir);
-    let json2xmlParser = new j2xParser(j2xOptions);
-    let profileJSON = {
+    const profileDir = await fs.readdirSync(inputdir);
+    const json2xmlParser = new j2xParser(j2xOptions);
+    const profileJSON = {
       Profile: {
         "@": {
           xmlns: "http://soap.sforce.com/2006/04/metadata",
@@ -63,14 +63,14 @@ export default class Composer extends SfdxCommand {
     for (const profileAccessFileName of profileDir.sort(
       profileAccessFilenamesCompare
     )) {
-      let profileAccessXMLData = await fs.readFileSync(
+      const profileAccessXMLData = await fs.readFileSync(
         inputdir + "/" + profileAccessFileName,
         {
           encoding: "utf8",
         }
       );
       if (x2jParser.validate(profileAccessXMLData) === true) {
-        let profileAccessJSON = x2jParser.parse(
+        const profileAccessJSON = x2jParser.parse(
           profileAccessXMLData,
           x2jOptions
         );
