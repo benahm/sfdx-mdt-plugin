@@ -9,19 +9,17 @@ import { substringBefore } from "../../../utils/utilities";
 
 import * as j2xOptions from "../../../config/j2xOptions.json";
 
-export default class Composer extends SfdxCommand {
+export default class Retriever extends SfdxCommand {
   public static examples = [
-    `$ sfdx mdt:profile:compose -p {sourcepath} -d {outputdirectory}
-  Compose multiple profile access files into the Profile xml file
+    `$ sfdx mdt:profile:retrieve -u {sourceOrg} -p {sourcepath} [-d {outputdirectory}]
+  Retrieve a profile with all the accesses
   `,
   ];
-
-  protected static requiresUsername = true;
 
   protected static flagsConfig = {
     sourcepath: flags.string({
       char: "p",
-      description: "The path to the source metadata file",
+      description: "The path to the source metadata profile file",
     }),
     outputdir: flags.string({
       char: "d",
@@ -29,6 +27,8 @@ export default class Composer extends SfdxCommand {
         "The input directory that stores the decomposed metadata files",
     }),
   };
+
+  protected static requiresUsername = true;
 
   public async run(): Promise<AnyJson> {
     this.ux.startSpinner(chalk.yellowBright("Retrieving Profile"));

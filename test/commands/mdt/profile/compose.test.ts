@@ -6,7 +6,7 @@ import * as x2jOptions from "../../../../src/config/x2jOptions.json";
 
 const testdatapath = "test/commands/mdt/profile/data";
 
-describe("cmd:profile:compose", () => {
+describe("mdt:profile:compose", () => {
   it("compose two labels", async () => {
     let composer = new Composer([], null);
 

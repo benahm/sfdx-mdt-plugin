@@ -7,7 +7,7 @@ import * as x2jOptions from "../../../../src/config/x2jOptions.json";
 
 const testdatapath = "test/commands/mdt/profile/data";
 
-describe("cmd:profile:decompose", () => {
+describe("mdt:profile:decompose", () => {
   it("decompose custom labels", async () => {
     let decomposer = new Decomposer([], null);
     if (!fs.existsSync(`${testdatapath}/decompose/test1/decomposed`)) {
