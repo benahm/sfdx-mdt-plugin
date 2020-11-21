@@ -88,11 +88,35 @@ const normalizeIP = (ip) =>
 const substringBefore = (text, char) => text.substring(0, text.indexOf(char));
 
 /**
+ * Substring from a text before given char
+ * @param text
+ * @param char
+ */
+const substringBeforeLast = (text, char) =>
+  text.substring(0, text.lastIndexOf(char));
+
+/**
+ * Substring from a text before given char
+ * @param text
+ * @param char
+ */
+const substringBeforeNthChar = (text, char, n) =>
+  text.split(char).slice(0, n).join(char);
+
+/**
  * Substring from a text after given char
  * @param text
  * @param char
  */
 const substringAfter = (text, char) => text.substring(text.indexOf(char) + 1);
+
+/**
+ * Substring from a text before given char
+ * @param text
+ * @param char
+ */
+const substringAfterLast = (text, char) =>
+  text.substring(text.lastIndexOf(char) + 1);
 
 /**
  * Capitalize first letter of a string
@@ -111,6 +135,10 @@ const uncapitalizeFirstLetter = (string) =>
 export {
   profileAccessNameMap,
   substringBefore,
+  substringBeforeLast,
+  substringBeforeNthChar,
+  substringAfter,
+  substringAfterLast,
   capitalizeFirstLetter,
   uncapitalizeFirstLetter,
   profileAccessFilenamesCompare,
