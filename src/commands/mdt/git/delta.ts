@@ -125,6 +125,15 @@ export default class Differ extends SfdxCommand {
             { rootTagName: "PermissionSet", requiredTagNames: [] }
           );
           break;
+        /** handle sharing rules */
+        case "force-app/main/default/sharingRules":
+          await this.copyComplexDiffMetadata(
+            from,
+            `${metadataFilePath}`,
+            `${outputdir}/${metadataFilePath}`,
+            { rootTagName: "SharingRules", requiredTagNames: [] }
+          );
+          break;
         /** handle translations */
         case "force-app/main/default/translations":
           await this.copyComplexDiffMetadata(
