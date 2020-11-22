@@ -22,7 +22,7 @@ $ npm install -g sfdx-mdt-plugin
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-sfdx-mdt-plugin/0.0.4 win32-x64 node-v12.14.1
+sfdx-mdt-plugin/0.0.5 win32-x64 node-v12.14.1
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -32,6 +32,7 @@ USAGE
 <!-- commands -->
 * [`sfdx mdt:customlabels:compose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtcustomlabelscompose--p-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx mdt:customlabels:decompose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtcustomlabelsdecompose--p-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx mdt:git:delta [-f <string>] [-t <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtgitdelta--f-string--t-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx mdt:profile:compose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtprofilecompose--p-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx mdt:profile:decompose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtprofiledecompose--p-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx mdt:profile:retrieve [-p <string>] [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtprofileretrieve--p-string--d-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
@@ -59,7 +60,7 @@ EXAMPLE
      Compose multiple custom label files into a Custom Label xml file
 ```
 
-_See code: [lib\commands\mdt\customlabels\compose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.4/lib\commands\mdt\customlabels\compose.js)_
+_See code: [lib\commands\mdt\customlabels\compose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.5/lib\commands\mdt\customlabels\compose.js)_
 
 ## `sfdx mdt:customlabels:decompose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -84,7 +85,34 @@ EXAMPLE
      Decompose Custom Labels xml file to multiple custom label files
 ```
 
-_See code: [lib\commands\mdt\customlabels\decompose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.4/lib\commands\mdt\customlabels\decompose.js)_
+_See code: [lib\commands\mdt\customlabels\decompose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.5/lib\commands\mdt\customlabels\decompose.js)_
+
+## `sfdx mdt:git:delta [-f <string>] [-t <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+
+```
+USAGE
+  $ sfdx mdt:git:delta [-f <string>] [-t <string>] [-d <string>] [--json] [--loglevel 
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
+
+OPTIONS
+  -d, --outputdir=outputdir                                                         The output directory to store the
+                                                                                    decomposed metadata files
+
+  -f, --from=from                                                                   Branch or commit from
+
+  -t, --to=to                                                                       [default: HEAD] Branch or commit to
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+
+EXAMPLE
+  $ sfdx mdt:git:diff -f {fromCommit} -t {toCommit} -d {outputdirectory}
+     Decompose Custom Labels xml file to multiple custom label files
+```
+
+_See code: [lib\commands\mdt\git\delta.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.5/lib\commands\mdt\git\delta.js)_
 
 ## `sfdx mdt:profile:compose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -109,7 +137,7 @@ EXAMPLE
      Compose multiple profile access files into the Profile xml file
 ```
 
-_See code: [lib\commands\mdt\profile\compose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.4/lib\commands\mdt\profile\compose.js)_
+_See code: [lib\commands\mdt\profile\compose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.5/lib\commands\mdt\profile\compose.js)_
 
 ## `sfdx mdt:profile:decompose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -134,7 +162,7 @@ EXAMPLE
        Decompose Profile xml file to multiple profile access files
 ```
 
-_See code: [lib\commands\mdt\profile\decompose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.4/lib\commands\mdt\profile\decompose.js)_
+_See code: [lib\commands\mdt\profile\decompose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.5/lib\commands\mdt\profile\decompose.js)_
 
 ## `sfdx mdt:profile:retrieve [-p <string>] [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -147,7 +175,8 @@ OPTIONS
   -d, --outputdir=outputdir                                                         The input directory that stores the
                                                                                     decomposed metadata files
 
-  -p, --sourcepath=sourcepath                                                       The path to the source metadata file
+  -p, --sourcepath=sourcepath                                                       The path to the source metadata
+                                                                                    profile file
 
   -u, --targetusername=targetusername                                               username or alias for the target
                                                                                     org; overrides default target org
@@ -161,10 +190,10 @@ OPTIONS
                                                                                     this command invocation
 
 EXAMPLE
-  $ sfdx mdt:profile:compose -p {sourcepath} -d {outputdirectory}
-     Compose multiple profile access files into the Profile xml file
+  $ sfdx mdt:profile:retrieve -u {sourceOrg} -p {sourcepath} [-d {outputdirectory}]
+     Retrieve a profile with all the accesses
 ```
 
-_See code: [lib\commands\mdt\profile\retrieve.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.4/lib\commands\mdt\profile\retrieve.js)_
+_See code: [lib\commands\mdt\profile\retrieve.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.0.5/lib\commands\mdt\profile\retrieve.js)_
 <!-- commandsstop -->
 <!-- debugging-your-plugin -->
