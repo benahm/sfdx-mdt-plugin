@@ -10,10 +10,13 @@ import {
   substringBeforeLast,
   substringBeforeNthChar,
   substringAfterLast,
+  substringBefore,
 } from "../../../utils/utilities";
 
 import * as j2xOptions from "../../../config/j2xOptions.json";
 import * as x2jOptions from "../../../config/x2jOptions.json";
+
+const FMD_FOLDER = "force-app/main/default";
 
 export default class Differ extends SfdxCommand {
   public static examples = [
@@ -60,7 +63,7 @@ export default class Differ extends SfdxCommand {
     console.log(chalk.green(gitDiffList));
     const metadataFilePathList = gitDiffList
       .split("\n")
-      .filter((fileName) => fileName.startsWith("force-app/main/default"));
+      .filter((fileName) => fileName.startsWith(FMD_FOLDER));
     for (const metadataFilePath of metadataFilePathList) {
       await fs.mkdirSync(
         `${outputdir}/${substringBeforeLast(metadataFilePath, "/")}`,
@@ -77,7 +80,7 @@ export default class Differ extends SfdxCommand {
       );
       switch (metadataFolderPath) {
         /** handle aura components */
-        case "force-app/main/default/aura":
+        case `${FMD_FOLDER}/aura`:
           const auraFileNames = fs.readdirSync(`${folderPath}`);
           for (const auraFileName of auraFileNames) {
             await fs.copyFileSync(
@@ -87,7 +90,7 @@ export default class Differ extends SfdxCommand {
           }
           break;
         /** handle object translations */
-        case "force-app/main/default/objectTranslations":
+        case `${FMD_FOLDER}/objectTranslations`:
           const objTraFolderName = substringAfterLast(folderPath, "/");
           await fs.copyFileSync(
             `${folderPath}/${objTraFolderName}.objectTranslation-meta.xml`,
@@ -98,8 +101,39 @@ export default class Differ extends SfdxCommand {
             `${outputdir}/${metadataFilePath}`
           );
           break;
+        /** handle static resources */
+        case `${FMD_FOLDER}/staticresources`:
+          const staticResourceFolder = `${FMD_FOLDER}/staticresources`;
+          if (folderPath !== staticResourceFolder) {
+            const subFolderPath = folderPath.replace(
+              staticResourceFolder + "/",
+              ""
+            );
+            const resourceFolderName = substringBefore(
+              subFolderPath + "/",
+              "/"
+            );
+            await fs.copyFileSync(
+              `${staticResourceFolder}/${resourceFolderName}.resource-meta.xml`,
+              `${outputdir}/${staticResourceFolder}/${resourceFolderName}.resource-meta.xml`
+            );
+          } else {
+            const resourceName = substringBeforeLast(
+              substringAfterLast(metadataFilePath, "/"),
+              "."
+            );
+            await fs.copyFileSync(
+              `${folderPath}/${resourceName}.resource-meta.xml`,
+              `${outputdir}/${folderPath}/${resourceName}.resource-meta.xml`
+            );
+          }
+          await fs.copyFileSync(
+            `${metadataFilePath}`,
+            `${outputdir}/${metadataFilePath}`
+          );
+          break;
         /** handle custom labels */
-        case "force-app/main/default/labels":
+        case `${FMD_FOLDER}/labels`:
           await this.copyComplexDiffMetadata(
             from,
             `${metadataFilePath}`,
@@ -108,7 +142,7 @@ export default class Differ extends SfdxCommand {
           );
           break;
         /** handle profiles */
-        case "force-app/main/default/profiles":
+        case `${FMD_FOLDER}/profiles`:
           await this.copyComplexDiffMetadata(
             from,
             `${metadataFilePath}`,
@@ -117,7 +151,7 @@ export default class Differ extends SfdxCommand {
           );
           break;
         /** handle permission sets */
-        case "force-app/main/default/permissionsets":
+        case `${FMD_FOLDER}/permissionsets`:
           await this.copyComplexDiffMetadata(
             from,
             `${metadataFilePath}`,
@@ -126,7 +160,7 @@ export default class Differ extends SfdxCommand {
           );
           break;
         /** handle sharing rules */
-        case "force-app/main/default/sharingRules":
+        case `${FMD_FOLDER}/sharingRules`:
           await this.copyComplexDiffMetadata(
             from,
             `${metadataFilePath}`,
@@ -134,8 +168,17 @@ export default class Differ extends SfdxCommand {
             { rootTagName: "SharingRules", requiredTagNames: [] }
           );
           break;
+        /** handle matching rules */
+        case `${FMD_FOLDER}/matchingRules`:
+          await this.copyComplexDiffMetadata(
+            from,
+            `${metadataFilePath}`,
+            `${outputdir}/${metadataFilePath}`,
+            { rootTagName: "MatchingRules", requiredTagNames: [] }
+          );
+          break;
         /** handle translations */
-        case "force-app/main/default/translations":
+        case `${FMD_FOLDER}/translations`:
           await this.copyComplexDiffMetadata(
             from,
             `${metadataFilePath}`,
@@ -144,7 +187,7 @@ export default class Differ extends SfdxCommand {
           );
           break;
         /** handle workflow rules */
-        case "force-app/main/default/workflows":
+        case `${FMD_FOLDER}/workflows`:
           await this.copyComplexDiffMetadata(
             from,
             `${metadataFilePath}`,
