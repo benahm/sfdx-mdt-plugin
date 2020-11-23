@@ -110,6 +110,11 @@ export default class Differ extends SfdxCommand {
                 requiredTagNames: ["fullName", "active", "label"],
               }
             );
+          } else {
+            await fs.copyFileSync(
+              `${metadataFilePath}`,
+              `${outputdir}/${metadataFilePath}`
+            );
           }
           break;
         /** handle object translations */
