@@ -297,7 +297,13 @@ export default class Differ extends SfdxCommand {
           })
         );
       } else {
-        arrayContent.push(JSON.stringify({ tagName: subTagName, ...subNode }));
+        if (typeof subNode === "string") {
+          arrayContent.push(JSON.stringify({ tagName: subTagName, subNode }));
+        } else {
+          arrayContent.push(
+            JSON.stringify({ tagName: subTagName, ...subNode })
+          );
+        }
       }
     }
     return arrayContent;
