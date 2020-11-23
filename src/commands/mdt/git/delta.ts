@@ -118,14 +118,16 @@ export default class Differ extends SfdxCommand {
               `${outputdir}/${staticResourceFolder}/${resourceFolderName}.resource-meta.xml`
             );
           } else {
-            const resourceName = substringBeforeLast(
-              substringAfterLast(metadataFilePath, "/"),
-              "."
-            );
-            await fs.copyFileSync(
-              `${folderPath}/${resourceName}.resource-meta.xml`,
-              `${outputdir}/${folderPath}/${resourceName}.resource-meta.xml`
-            );
+            if (!metadataFilePath.endsWith(".resource-meta.xml")) {
+              const resourceName = substringBeforeLast(
+                substringAfterLast(metadataFilePath, "/"),
+                "."
+              );
+              await fs.copyFileSync(
+                `${folderPath}/${resourceName}.resource-meta.xml`,
+                `${outputdir}/${folderPath}/${resourceName}.resource-meta.xml`
+              );
+            }
           }
           await fs.copyFileSync(
             `${metadataFilePath}`,
