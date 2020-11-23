@@ -21,7 +21,7 @@ const FMD_FOLDER = "force-app/main/default";
 export default class Differ extends SfdxCommand {
   public static examples = [
     `$ sfdx mdt:git:diff -f {fromCommit} -t {toCommit} -d {outputdirectory}
-  Decompose Custom Labels xml file to multiple custom label files
+  Generate a delta package based on a git diff
   `,
   ];
 
@@ -32,13 +32,12 @@ export default class Differ extends SfdxCommand {
     }),
     to: flags.string({
       char: "t",
-      default: "HEAD",
+      default: "",
       description: "Branch or commit to",
     }),
     outputdir: flags.string({
       char: "d",
-      description:
-        "The output directory to store the decomposed metadata files",
+      description: "The output directory where to generate the package",
     }),
   };
 
