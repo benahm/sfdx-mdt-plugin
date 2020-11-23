@@ -264,7 +264,10 @@ export default class Differ extends SfdxCommand {
     arrayOfVersion1.forEach((item) => {
       const jsonItem = JSON.parse(item);
       const itemTagName = jsonItem.tagName;
+      const itemTagType = jsonItem.tagType;
+
       delete jsonItem.tagName;
+      delete jsonItem.tagType;
       if (
         !arrayOfVersion2.includes(item) ||
         requiredTagNames.includes(itemTagName)
@@ -272,7 +275,11 @@ export default class Differ extends SfdxCommand {
         if (diffJSON[itemTagName]) {
           diffJSON[itemTagName].push(jsonItem);
         } else {
-          diffJSON[itemTagName] = [jsonItem];
+          if (itemTagType === "text") {
+            diffJSON[itemTagName] = [jsonItem[itemTagName]];
+          } else {
+            diffJSON[itemTagName] = [jsonItem];
+          }
         }
       }
       if (itemTagName === "@") {
@@ -293,15 +300,29 @@ export default class Differ extends SfdxCommand {
       if (Array.isArray(subNode)) {
         arrayContent = arrayContent.concat(
           jsonContent[rootTagName][subTagName].map((el) => {
-            return JSON.stringify({ tagName: subTagName, ...el });
+            return JSON.stringify({
+              tagName: subTagName,
+              tagType: "array",
+              ...el,
+            });
           })
         );
       } else {
         if (typeof subNode === "string") {
-          arrayContent.push(JSON.stringify({ tagName: subTagName, subNode }));
+          arrayContent.push(
+            JSON.stringify({
+              tagName: subTagName,
+              tagType: "text",
+              [subTagName]: subNode,
+            })
+          );
         } else {
           arrayContent.push(
-            JSON.stringify({ tagName: subTagName, ...subNode })
+            JSON.stringify({
+              tagName: subTagName,
+              tagType: "object",
+              ...subNode,
+            })
           );
         }
       }
