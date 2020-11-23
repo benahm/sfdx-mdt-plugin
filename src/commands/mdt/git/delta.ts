@@ -44,7 +44,7 @@ export default class Differ extends SfdxCommand {
   public async run(): Promise<AnyJson> {
     this.ux.startSpinner(chalk.yellowBright("Generating delta"));
     try {
-      await this.diff(this.flags.from, this.flags.to, this.flags.outputdir);
+      await this.delta(this.flags.from, this.flags.to, this.flags.outputdir);
     } catch (e) {
       // output error
       this.ux.stopSpinner("❌");
@@ -55,7 +55,13 @@ export default class Differ extends SfdxCommand {
     return { success: true };
   }
 
-  public async diff(from, to, outputdir) {
+  /**
+   * generate a delta package
+   * @param from
+   * @param to
+   * @param outputdir
+   */
+  public async delta(from, to, outputdir) {
     const gitDiffList = execSync(
       `git diff --name-only ${from} ${to}`
     ).toString();
@@ -85,6 +91,24 @@ export default class Differ extends SfdxCommand {
             await fs.copyFileSync(
               `${folderPath}/${auraFileName}`,
               `${outputdir}/${folderPath}/${auraFileName}`
+            );
+          }
+          break;
+        /** handle objects */
+        case `${FMD_FOLDER}/objects`:
+          const isRecordTypePatern = new RegExp(
+            `${FMD_FOLDER}/objects/[^/]+/recordTypes`
+          );
+          // handle record types
+          if (isRecordTypePatern.test(`${folderPath}`)) {
+            await this.copyComplexDiffMetadata(
+              from,
+              `${metadataFilePath}`,
+              `${outputdir}/${metadataFilePath}`,
+              {
+                rootTagName: "RecordType",
+                requiredTagNames: ["fullName", "active", "label"],
+              }
             );
           }
           break;
@@ -216,6 +240,13 @@ export default class Differ extends SfdxCommand {
     }
   }
 
+  /**
+   * copy complex metadata diffs
+   * @param commit
+   * @param sourcepath
+   * @param destpath
+   * @param metadataInfo
+   */
   public async copyComplexDiffMetadata(
     commit,
     sourcepath,
@@ -253,6 +284,13 @@ export default class Differ extends SfdxCommand {
     });
   }
 
+  /**
+   * diff metadata
+   * @param xmlversion1
+   * @param xmlversion2
+   * @param rootTagName
+   * @param requiredTagNames
+   */
   public diffMetadata(xmlversion1, xmlversion2, rootTagName, requiredTagNames) {
     const json2xmlParser = new j2xParser(j2xOptions);
     const jsonVersion1 = x2jParser.parse(xmlversion1, x2jOptions);
@@ -293,6 +331,11 @@ export default class Differ extends SfdxCommand {
     return xmlResult;
   }
 
+  /**
+   * metadata to JS Array
+   * @param jsonContent
+   * @param rootTagName
+   */
   public metadataToJSArray(jsonContent, rootTagName) {
     let arrayContent = [];
     for (const subTagName in jsonContent[rootTagName]) {
@@ -308,7 +351,7 @@ export default class Differ extends SfdxCommand {
           })
         );
       } else {
-        if (typeof subNode === "string") {
+        if (typeof subNode !== "object") {
           arrayContent.push(
             JSON.stringify({
               tagName: subTagName,

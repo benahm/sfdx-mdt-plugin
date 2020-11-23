@@ -1,7 +1,7 @@
 {
   "name": "sfdx-mdt-plugin",
   "description": "Sfdx metadata plugin",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "author": "benahm",
   "bugs": "https://github.com/benahm/sfdx-mdt-plugin/issues",
   "dependencies": {
