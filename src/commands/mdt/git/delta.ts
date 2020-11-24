@@ -198,6 +198,24 @@ export default class Differ extends SfdxCommand {
             { rootTagName: "SharingRules", requiredTagNames: [] }
           );
           break;
+        /** handle assignment rules */
+        case `${FMD_FOLDER}/assignmentRules`:
+          await this.copyComplexDiffMetadata(
+            from,
+            `${metadataFilePath}`,
+            `${outputdir}/${metadataFilePath}`,
+            { rootTagName: "AssignmentRules", requiredTagNames: [] }
+          );
+          break;
+        /** handle auto response rules */
+        case `${FMD_FOLDER}/autoResponseRules`:
+          await this.copyComplexDiffMetadata(
+            from,
+            `${metadataFilePath}`,
+            `${outputdir}/${metadataFilePath}`,
+            { rootTagName: "AutoResponseRules", requiredTagNames: [] }
+          );
+          break;
         /** handle matching rules */
         case `${FMD_FOLDER}/matchingRules`:
           await this.copyComplexDiffMetadata(
