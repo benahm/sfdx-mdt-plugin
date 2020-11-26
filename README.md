@@ -6,15 +6,13 @@
 [![Downloads/week](https://img.shields.io/npm/dw/sfdx-mdt-plugin.svg)](https://npmjs.org/package/sfdx-mdt-plugin)
 [![License](https://img.shields.io/npm/l/sfdx-mdt-plugin.svg)](https://github.com/Repositories/sfdx-mdt-plugin/blob/master/package.json)
 
-<p align="center"><img src ="/assets/mdt.jpg" width="400"/></p>
+<p align="center"><img src ="/assets/mdt.jpg" width="300"/></p>
 
 <!-- toc -->
-
-- [sfdx-mdt-plugin](#sfdx-mdt-plugin)
-  <!-- tocstop -->
+* [sfdx-mdt-plugin](#sfdx-mdt-plugin)
+<!-- tocstop -->
   <!-- install -->
   <!-- usage -->
-
 ```sh-session
 $ npm install -g sfdx-mdt-plugin
 $ sfdx COMMAND
@@ -26,23 +24,21 @@ USAGE
   $ sfdx COMMAND
 ...
 ```
-
 <!-- usagestop -->
 <!-- commands -->
-
-- [`sfdx mdt:customlabels:compose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtcustomlabelscompose--p-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
-- [`sfdx mdt:customlabels:decompose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtcustomlabelsdecompose--p-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
-- [`sfdx mdt:git:delta [-f <string>] [-t <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtgitdelta--f-string--t-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
-- [`sfdx mdt:profile:adapt [-p <string>] [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtprofileadapt--p-string--d-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
-- [`sfdx mdt:profile:compose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtprofilecompose--p-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
-- [`sfdx mdt:profile:decompose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtprofiledecompose--p-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
-- [`sfdx mdt:profile:retrieve [-p <string>] [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtprofileretrieve--p-string--d-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx mdt:customlabels:compose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtcustomlabelscompose--p-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx mdt:customlabels:decompose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtcustomlabelsdecompose--p-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx mdt:git:delta [-f <string>] [-t <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtgitdelta--f-string--t-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx mdt:profile:adapt [-p <string>] [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtprofileadapt--p-string--d-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx mdt:profile:compose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtprofilecompose--p-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx mdt:profile:decompose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtprofiledecompose--p-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx mdt:profile:retrieve [-p <string>] [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtprofileretrieve--p-string--d-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 
 ## `sfdx mdt:customlabels:compose [-p <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 ```
 USAGE
-  $ sfdx mdt:customlabels:compose [-p <string>] [-d <string>] [--json] [--loglevel
+  $ sfdx mdt:customlabels:compose [-p <string>] [-d <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
@@ -67,7 +63,7 @@ _See code: [lib\commands\mdt\customlabels\compose.js](https://github.com/benahm/
 
 ```
 USAGE
-  $ sfdx mdt:customlabels:decompose [-p <string>] [-d <string>] [--json] [--loglevel
+  $ sfdx mdt:customlabels:decompose [-p <string>] [-d <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
@@ -92,7 +88,7 @@ _See code: [lib\commands\mdt\customlabels\decompose.js](https://github.com/benah
 
 ```
 USAGE
-  $ sfdx mdt:git:delta [-f <string>] [-t <string>] [-d <string>] [--json] [--loglevel
+  $ sfdx mdt:git:delta [-f <string>] [-t <string>] [-d <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
@@ -119,7 +115,7 @@ _See code: [lib\commands\mdt\git\delta.js](https://github.com/benahm/sfdx-mdt-pl
 
 ```
 USAGE
-  $ sfdx mdt:profile:adapt [-p <string>] [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
+  $ sfdx mdt:profile:adapt [-p <string>] [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
@@ -150,7 +146,7 @@ _See code: [lib\commands\mdt\profile\adapt.js](https://github.com/benahm/sfdx-md
 
 ```
 USAGE
-  $ sfdx mdt:profile:compose [-p <string>] [-d <string>] [--json] [--loglevel
+  $ sfdx mdt:profile:compose [-p <string>] [-d <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
@@ -175,7 +171,7 @@ _See code: [lib\commands\mdt\profile\compose.js](https://github.com/benahm/sfdx-
 
 ```
 USAGE
-  $ sfdx mdt:profile:decompose [-p <string>] [-d <string>] [--json] [--loglevel
+  $ sfdx mdt:profile:decompose [-p <string>] [-d <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
@@ -200,7 +196,7 @@ _See code: [lib\commands\mdt\profile\decompose.js](https://github.com/benahm/sfd
 
 ```
 USAGE
-  $ sfdx mdt:profile:retrieve [-p <string>] [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel
+  $ sfdx mdt:profile:retrieve [-p <string>] [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
@@ -227,6 +223,5 @@ EXAMPLE
 ```
 
 _See code: [lib\commands\mdt\profile\retrieve.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.1.6/lib\commands\mdt\profile\retrieve.js)_
-
 <!-- commandsstop -->
 <!-- debugging-your-plugin -->
