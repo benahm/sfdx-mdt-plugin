@@ -6,17 +6,14 @@ import * as path from "path";
 import * as x2jParser from "fast-xml-parser";
 import { j2xParser } from "fast-xml-parser";
 
-import {
-  profileAccessNameMap,
-  substringBefore,
-} from "../../../utils/utilities";
+import { substringBefore } from "../../../utils/utilities";
 import * as j2xOptions from "../../../config/j2xOptions.json";
 import * as x2jOptions from "../../../config/x2jOptions.json";
 
 export default class Decomposer extends SfdxCommand {
   public static examples = [
-    `$ sfdx mdt:profile:decompose -p {sourcepath} -d {outputdirectory}
-    Decompose Profile xml file to multiple profile access files
+    `$ sfdx mdt:profile:adapt -p {sourcepath} -d {outputdirectory}
+    Adapt a profile to be deployed to an org
   `,
   ];
 
@@ -163,6 +160,8 @@ export default class Decomposer extends SfdxCommand {
         (profileAccess) => profileAccess["recordType"]
       );
 
+      // metadata api limitation
+      // standard tab are ignored because can not be listed
       await this.filterProfileAccesses(
         profileJSON.Profile,
         "tabVisibilities",
@@ -170,16 +169,14 @@ export default class Decomposer extends SfdxCommand {
         (profileAccess) => profileAccess["tab"]
       );
 
-      // var profileJSON = await conn.sobject("Profile").describe()
-      // await this.filterProfileAccesses(
-      //   profileJSON,
-      //   "userPermissions",
-      //   "userPermissions"
-      // );
+      await this.filterUserPermissionAccesses(
+        profileJSON.Profile,
+        "userPermissions"
+      );
     }
 
-    // console.log(result);
-    let formattedXml = json2xmlParser.parse(profileJSON);
+    // convert to xml
+    const formattedXml = json2xmlParser.parse(profileJSON);
 
     // write xml version & encoding
     await fs.writeFileSync(
@@ -221,73 +218,49 @@ export default class Decomposer extends SfdxCommand {
       profile[profileAccessName] = profileAccessList.filter((profileAccess) =>
         metadataTypeFullNames.includes(getProfileAccessName(profileAccess))
       );
+      console.log(`${profileAccessName} ✔️`);
     }
   }
 
+  /**
+   *
+   * @param profile
+   * @param profileAccessName
+   */
+  public async filterUserPermissionAccesses(profile, profileAccessName) {
+    const profileAccess = profile[profileAccessName];
+    if (profileAccess) {
+      const conn = this.org.getConnection();
+      const profileDescribe = await conn.sobject("Profile").describe();
+      const profileAccessList = Array.isArray(profileAccess)
+        ? profileAccess
+        : [profileAccess];
+      const userPermissionNameList = profileDescribe.fields
+        .map((userPermission) => userPermission.name)
+        .filter((name) => !["Id", "Name"].includes(name))
+        .map((name) => name.slice(11));
+      profile[profileAccessName] = profileAccessList.filter((profileAccess) =>
+        userPermissionNameList.includes(profileAccess.name)
+      );
+      console.log(`${profileAccessName} ✔️`);
+    }
+  }
+
+  /**
+   * list metadata type full names
+   * @param metadataTypeName
+   * @param folderName
+   */
   public async listMetadataTypeFullNames(metadataTypeName, folderName?) {
     const conn = this.org.getConnection();
     const listMetadataQuery = folderName
       ? { type: metadataTypeName, folder: folderName }
       : { type: metadataTypeName };
     const metadataList = await conn.metadata.list([listMetadataQuery]);
-    console.log("metadataList", metadataTypeName, listMetadataQuery);
+
     const metadataFullNameList = metadataList.map(
       (metadata) => metadata.fullName
     );
     return metadataFullNameList;
   }
-
-  /**
-   * metadata to JS Array
-   * @param jsonContent
-   * @param rootTagName
-   */
-  public metadataToJSArray(jsonContent, rootTagName) {
-    let arrayContent = [];
-    for (const subTagName in jsonContent[rootTagName]) {
-      const subNode = jsonContent[rootTagName][subTagName];
-      if (Array.isArray(subNode)) {
-        arrayContent = arrayContent.concat(
-          jsonContent[rootTagName][subTagName].map((el) => {
-            return JSON.stringify(
-              {
-                tagName: subTagName,
-                tagType: "array",
-                ...el,
-              },
-              stringifyReplacer
-            );
-          })
-        );
-      } else {
-        if (typeof subNode !== "object") {
-          arrayContent.push(
-            JSON.stringify(
-              {
-                tagName: subTagName,
-                tagType: "text",
-                [subTagName]: subNode,
-              },
-              stringifyReplacer
-            )
-          );
-        } else {
-          arrayContent.push(
-            JSON.stringify(
-              {
-                tagName: subTagName,
-                tagType: "object",
-                ...subNode,
-              },
-              stringifyReplacer
-            )
-          );
-        }
-      }
-    }
-    return arrayContent;
-  }
 }
-
-const stringifyReplacer = (k, v) =>
-  v === true ? "true" : v === false ? "false" : v;
