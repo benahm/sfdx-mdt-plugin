@@ -13,8 +13,7 @@ import {
   substringBefore,
 } from "../../../utils/utilities";
 
-import * as j2xOptions from "../../../config/j2xOptions.json";
-import * as x2jOptions from "../../../config/x2jOptions.json";
+import { j2xOptions, x2jOptions } from "../../../config/fastXMLOptions";
 
 const FMD_FOLDER = "force-app/main/default";
 

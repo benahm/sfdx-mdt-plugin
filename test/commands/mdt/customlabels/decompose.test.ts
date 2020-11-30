@@ -3,7 +3,7 @@ import { expect } from "chai";
 import * as x2jParser from "fast-xml-parser";
 import * as rimraf from "rimraf";
 import Decomposer from "../../../../src/commands/mdt/customlabels/decompose";
-import * as x2jOptions from "../../../../src/config/x2jOptions.json";
+import { x2jOptions } from "../../../../src/config/fastXMLOptions";
 
 const testdatapath = "test/commands/mdt/customlabels/data";
 

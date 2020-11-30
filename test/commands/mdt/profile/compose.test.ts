@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { expect } from "chai";
 import * as x2jParser from "fast-xml-parser";
 import Composer from "../../../../src/commands/mdt/profile/compose";
-import * as x2jOptions from "../../../../src/config/x2jOptions.json";
+import { x2jOptions } from "../../../../src/config/fastXMLOptions";
 
 const testdatapath = "test/commands/mdt/profile/data";
 
@@ -24,8 +24,6 @@ describe("mdt:profile:compose", () => {
     expect(jsonObj.Profile.classAccesses.length).to.equal(2);
     expect(jsonObj.Profile.classAccesses[0].apexClass).to.equal("MyClass1");
     expect(jsonObj.Profile.classAccesses[1].apexClass).to.equal("MyClass2");
-    await fs.unlinkSync(
-      `${testdatapath}/compose/test1/Admin.profile-meta.xml`
-    );
+    await fs.unlinkSync(`${testdatapath}/compose/test1/Admin.profile-meta.xml`);
   });
 });

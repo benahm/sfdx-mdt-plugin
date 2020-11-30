@@ -9,8 +9,7 @@ import {
   profileAccessNameMap,
   capitalizeFirstLetter,
 } from "../../../utils/utilities";
-import * as j2xOptions from "../../../config/j2xOptions.json";
-import * as x2jOptions from "../../../config/x2jOptions.json";
+import { j2xOptions, x2jOptions } from "../../../config/fastXMLOptions";
 
 export default class Decomposer extends SfdxCommand {
   public static examples = [

@@ -7,10 +7,10 @@ import * as x2jParser from "fast-xml-parser";
 import { j2xParser } from "fast-xml-parser";
 
 import { substringBefore } from "../../../utils/utilities";
-import * as j2xOptions from "../../../config/j2xOptions.json";
-import * as x2jOptions from "../../../config/x2jOptions.json";
+import { filterMetadataTypeTag } from "../../../utils/adapt";
+import { j2xOptions, x2jOptions } from "../../../config/fastXMLOptions";
 
-export default class Decomposer extends SfdxCommand {
+export default class Adapter extends SfdxCommand {
   public static examples = [
     `$ sfdx mdt:profile:adapt -p {sourcepath} -d {outputdirectory}
     Adapt a profile to be deployed to an org
@@ -62,98 +62,112 @@ export default class Decomposer extends SfdxCommand {
       // parse xml to json
       profileJSON = x2jParser.parse(profileXMLData, x2jOptions);
 
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "applicationVisibilities",
         "CustomApplication",
         (profileAccess) => profileAccess["application"]
       );
 
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "categoryGroupVisibilities",
         "DataCategoryGroup",
         (profileAccess) => profileAccess["dataCategoryGroup"]
       );
 
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "classAccesses",
         "ApexClass",
         (profileAccess) => profileAccess["apexClass"]
       );
 
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "customMetadataTypeAccesses",
         "CustomObject",
         (profileAccess) => profileAccess["name"]
       );
 
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "customPermissions",
         "CustomPermission",
         (profileAccess) => profileAccess["name"]
       );
 
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "customSettingAccesses",
         "CustomObject",
         (profileAccess) => profileAccess["name"]
       );
 
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "externalDataSourceAccesses",
         "ExternalDataSource",
         (profileAccess) => profileAccess["externalDataSource"]
       );
 
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "fieldPermissions",
         "CustomField",
         (profileAccess) => profileAccess["field"]
       );
 
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "flowAccesses",
         "Flow",
         (profileAccess) => profileAccess["flow"]
       );
 
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "layoutAssignments",
         "Layout",
         (profileAccess) => profileAccess["layout"]
       );
 
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "layoutAssignments",
         "RecordType",
         (profileAccess) => profileAccess["recordType"]
       );
 
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "objectPermissions",
         "CustomObject",
         (profileAccess) => profileAccess["object"]
       );
 
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "pageAccesses",
         "ApexPage",
         (profileAccess) => profileAccess["apexPage"]
       );
 
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "recordTypeVisibilities",
         "RecordType",
@@ -162,14 +176,16 @@ export default class Decomposer extends SfdxCommand {
 
       // metadata api limitation
       // standard tab are ignored because can not be listed
-      await this.filterProfileAccesses(
+      await filterMetadataTypeTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "tabVisibilities",
         "CustomTab",
         (profileAccess) => profileAccess["tab"]
       );
 
-      await this.filterUserPermissionAccesses(
+      await this.filterUserPermissionTag(
+        this.org.getConnection(),
         profileJSON.Profile,
         "userPermissions"
       );
@@ -196,41 +212,12 @@ export default class Decomposer extends SfdxCommand {
 
   /**
    *
-   * @param profileJSON
-   * @param profileAccessName
-   * @param metadataType
-   */
-  public async filterProfileAccesses(
-    profile,
-    profileAccessName,
-    metadataType,
-    getProfileAccessName
-  ) {
-    const profileAccess = profile[profileAccessName];
-    if (profileAccess) {
-      const metadataTypeFullNames = await this.listMetadataTypeFullNames(
-        metadataType
-      );
-      const profileAccessList = Array.isArray(profileAccess)
-        ? profileAccess
-        : [profileAccess];
-
-      profile[profileAccessName] = profileAccessList.filter((profileAccess) =>
-        metadataTypeFullNames.includes(getProfileAccessName(profileAccess))
-      );
-      console.log(`${profileAccessName} ✔️`);
-    }
-  }
-
-  /**
-   *
    * @param profile
    * @param profileAccessName
    */
-  public async filterUserPermissionAccesses(profile, profileAccessName) {
+  public async filterUserPermissionTag(conn, profile, profileAccessName) {
     const profileAccess = profile[profileAccessName];
     if (profileAccess) {
-      const conn = this.org.getConnection();
       const profileDescribe = await conn.sobject("Profile").describe();
       const profileAccessList = Array.isArray(profileAccess)
         ? profileAccess
@@ -244,23 +231,5 @@ export default class Decomposer extends SfdxCommand {
       );
       console.log(`${profileAccessName} ✔️`);
     }
-  }
-
-  /**
-   * list metadata type full names
-   * @param metadataTypeName
-   * @param folderName
-   */
-  public async listMetadataTypeFullNames(metadataTypeName, folderName?) {
-    const conn = this.org.getConnection();
-    const listMetadataQuery = folderName
-      ? { type: metadataTypeName, folder: folderName }
-      : { type: metadataTypeName };
-    const metadataList = await conn.metadata.list([listMetadataQuery]);
-
-    const metadataFullNameList = metadataList.map(
-      (metadata) => metadata.fullName
-    );
-    return metadataFullNameList;
   }
 }

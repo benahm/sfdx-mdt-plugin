@@ -3,7 +3,7 @@ import { expect } from "chai";
 import * as x2jParser from "fast-xml-parser";
 import { j2xParser } from "fast-xml-parser";
 import Differ from "../../../../src/commands/mdt/git/delta";
-import * as j2xOptions from "../../../../src/config/j2xOptions.json";
+import { j2xOptions } from "../../../../src/config/fastXMLOptions";
 
 describe("mdt:git:delta", () => {
   it("metadataToJSArray", async () => {

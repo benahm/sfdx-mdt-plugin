@@ -12,6 +12,7 @@
     "@salesforce/core": "^2",
     "chalk": "^4.1.0",
     "fast-xml-parser": "^3.17.4",
+    "he": "^1.2.0",
     "tslib": "^1"
   },
   "devDependencies": {

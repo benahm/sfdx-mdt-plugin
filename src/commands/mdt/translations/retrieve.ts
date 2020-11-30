@@ -3,23 +3,25 @@ import { AnyJson } from "@salesforce/ts-types";
 import * as chalk from "chalk";
 import * as fs from "fs";
 import * as path from "path";
+import * as he from "he";
 import { j2xParser } from "fast-xml-parser";
 
 import { substringBefore } from "../../../utils/utilities";
 
 import { j2xOptions } from "../../../config/fastXMLOptions";
 
+j2xOptions.tagValueProcessor = (a) => he.escape(a);
 export default class Retriever extends SfdxCommand {
   public static examples = [
-    `$ sfdx mdt:profile:retrieve -u {sourceOrg} -p {sourcepath} [-d {outputdirectory}]
-  Retrieve a profile with all the accesses
+    `$ sfdx mdt:translations:retrieve -u {sourceOrg} -p {sourcepath} [-d {outputdirectory}]
+  Retrieve all translations related to a given language
   `,
   ];
 
   protected static flagsConfig = {
     sourcepath: flags.string({
       char: "p",
-      description: "The path to the source metadata profile file",
+      description: "The path to the source metadata translation file",
     }),
     outputdir: flags.string({
       char: "d",
@@ -31,7 +33,7 @@ export default class Retriever extends SfdxCommand {
   protected static requiresUsername = true;
 
   public async run(): Promise<AnyJson> {
-    this.ux.startSpinner(chalk.yellowBright("Retrieving Profile"));
+    this.ux.startSpinner(chalk.yellowBright("Retrieving Translations"));
 
     try {
       await this.retrieve(this.flags.sourcepath, this.flags.outputdir);
@@ -50,20 +52,26 @@ export default class Retriever extends SfdxCommand {
   public async retrieve(sourcepath, outputdir) {
     const json2xmlParser = new j2xParser(j2xOptions);
     const conn = this.org.getConnection();
-    const profileName = substringBefore(path.basename(sourcepath), ".");
+    const languageCode = substringBefore(path.basename(sourcepath), ".");
     const destpath = outputdir
-      ? `${outputdir}/${profileName}.profile.meta.xml`
+      ? `${outputdir}/${languageCode}.translation-meta.xml`
       : sourcepath;
 
-    // read profile from org
-    const profileJSON = await conn.metadata.readSync("Profile", [profileName]);
+    // read translations from org
+    const translationsJSON = await conn.metadata.readSync("Translations", [
+      languageCode,
+    ]);
+
+    await fs.writeFileSync(`trads.json`, JSON.stringify(translationsJSON), {
+      encoding: "utf8",
+    });
 
     let formattedXml = json2xmlParser.parse({
-      Profile: {
+      Translations: {
         "@": {
           xmlns: "http://soap.sforce.com/2006/04/metadata",
         },
-        ...profileJSON,
+        ...translationsJSON,
       },
     });
 

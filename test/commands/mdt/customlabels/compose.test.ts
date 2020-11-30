@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { expect } from "chai";
 import * as x2jParser from "fast-xml-parser";
 import Composer from "../../../../src/commands/mdt/customlabels/compose";
-import * as x2jOptions from "../../../../src/config/x2jOptions.json";
+import { x2jOptions } from "../../../../src/config/fastXMLOptions";
 
 const testdatapath = "test/commands/mdt/customlabels/data";
 
