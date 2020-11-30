@@ -10,7 +10,6 @@ import { substringBefore } from "../../../utils/utilities";
 
 import { j2xOptions } from "../../../config/fastXMLOptions";
 
-j2xOptions.tagValueProcessor = (a) => he.escape(a);
 export default class Retriever extends SfdxCommand {
   public static examples = [
     `$ sfdx mdt:translations:retrieve -u {sourceOrg} -p {sourcepath} [-d {outputdirectory}]
@@ -51,6 +50,7 @@ export default class Retriever extends SfdxCommand {
 
   public async retrieve(sourcepath, outputdir) {
     const json2xmlParser = new j2xParser(j2xOptions);
+    j2xOptions.tagValueProcessor = (a) => he.escape(a);
     const conn = this.org.getConnection();
     const languageCode = substringBefore(path.basename(sourcepath), ".");
     const destpath = outputdir
