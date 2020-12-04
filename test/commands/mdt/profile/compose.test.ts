@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import { expect } from "chai";
 import * as x2jParser from "fast-xml-parser";
 import Composer from "../../../../src/commands/mdt/profile/compose";
 import { x2jOptions } from "../../../../src/config/fastXMLOptions";
@@ -21,9 +20,9 @@ describe("mdt:profile:compose", () => {
       }
     );
     const jsonObj = x2jParser.parse(xmlData, x2jOptions);
-    expect(jsonObj.Profile.classAccesses.length).to.equal(2);
-    expect(jsonObj.Profile.classAccesses[0].apexClass).to.equal("MyClass1");
-    expect(jsonObj.Profile.classAccesses[1].apexClass).to.equal("MyClass2");
+    expect(jsonObj.Profile.classAccesses.length).toEqual(2);
+    expect(jsonObj.Profile.classAccesses[0].apexClass).toEqual("MyClass1");
+    expect(jsonObj.Profile.classAccesses[1].apexClass).toEqual("MyClass2");
     await fs.unlinkSync(`${testdatapath}/compose/test1/Admin.profile-meta.xml`);
   });
 });

@@ -1,3 +1,5 @@
+import * as fs from "fs";
+
 /**
  * map name from on profile access
  */
@@ -132,6 +134,51 @@ const capitalizeFirstLetter = (string) =>
 const uncapitalizeFirstLetter = (string) =>
   string.charAt(0).toLowerCase() + string.slice(1);
 
+/**
+ *
+ * @param path
+ */
+const mkdirRecursive = async (path) => {
+  await fs.mkdirSync(path, {
+    recursive: true,
+  });
+};
+
+/**
+ *
+ * @param path
+ */
+const readFile = async (path) => {
+  return await fs.readFileSync(path, {
+    encoding: "utf8",
+  });
+};
+
+/**
+ *
+ * @param path
+ */
+const writeFile = async (path, content) => {
+  await fs.writeFileSync(path, content, {
+    encoding: "utf8",
+  });
+};
+
+/**
+ *
+ * @param path
+ */
+const writeXMLFile = async (path, content) => {
+  await fs.writeFileSync(path, '<?xml version="1.0" encoding="UTF-8"?>\n', {
+    encoding: "utf8",
+  });
+
+  await fs.writeFileSync(path, content, {
+    encoding: "utf8",
+    flag: "a",
+  });
+};
+
 export {
   profileAccessNameMap,
   substringBefore,
@@ -142,4 +189,8 @@ export {
   capitalizeFirstLetter,
   uncapitalizeFirstLetter,
   profileAccessFilenamesCompare,
+  mkdirRecursive,
+  readFile,
+  writeFile,
+  writeXMLFile,
 };

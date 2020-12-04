@@ -6,7 +6,7 @@ import * as path from "path";
 import * as x2jParser from "fast-xml-parser";
 import { j2xParser } from "fast-xml-parser";
 
-import { substringBefore } from "../../../utils/utilities";
+import { substringBefore, writeXMLFile } from "../../../utils/utilities";
 import { filterMetadataTypeTag } from "../../../utils/adapt";
 import { j2xOptions, x2jOptions } from "../../../config/fastXMLOptions";
 
@@ -175,7 +175,7 @@ export default class Adapter extends SfdxCommand {
       );
 
       // metadata api limitation
-      // standard tab are ignored because can not be listed
+      // standard tabs are ignored because can not be listed
       await filterMetadataTypeTag(
         this.org.getConnection(),
         profileJSON.Profile,
@@ -194,20 +194,8 @@ export default class Adapter extends SfdxCommand {
     // convert to xml
     const formattedXml = json2xmlParser.parse(profileJSON);
 
-    // write xml version & encoding
-    await fs.writeFileSync(
-      `${destpath}`,
-      '<?xml version="1.0" encoding="UTF-8"?>\n',
-      {
-        encoding: "utf8",
-      }
-    );
-
     // write xml file
-    await fs.writeFileSync(`${destpath}`, formattedXml, {
-      encoding: "utf8",
-      flag: "a",
-    });
+    await writeXMLFile(`${destpath}`, formattedXml);
   }
 
   /**

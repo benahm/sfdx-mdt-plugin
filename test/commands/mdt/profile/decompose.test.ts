@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import { expect } from "chai";
 import * as x2jParser from "fast-xml-parser";
 import * as rimraf from "rimraf";
 import Decomposer from "../../../../src/commands/mdt/profile/decompose";
@@ -25,7 +24,7 @@ describe("mdt:profile:decompose", () => {
       }
     );
     const myApp1json = x2jParser.parse(myApp1xmldata, x2jOptions);
-    expect(myApp1json.applicationVisibilities.application).to.equal("MyApp1");
+    expect(myApp1json.applicationVisibilities.application).toEqual("MyApp1");
     const myTabxmldata = await fs.readFileSync(
       `${testdatapath}/decompose/test1/decomposed/TabVisibilities.MyTab.xml`,
       {
@@ -33,7 +32,7 @@ describe("mdt:profile:decompose", () => {
       }
     );
     const myTabjson = x2jParser.parse(myTabxmldata, x2jOptions);
-    expect(myTabjson.tabVisibilities.tab).to.equal("MyTab");
+    expect(myTabjson.tabVisibilities.tab).toEqual("MyTab");
 
     const userLicensexmldata = await fs.readFileSync(
       `${testdatapath}/decompose/test1/decomposed/UserLicense.userLicense.xml`,
@@ -42,7 +41,7 @@ describe("mdt:profile:decompose", () => {
       }
     );
     const userLicensejson = x2jParser.parse(userLicensexmldata, x2jOptions);
-    expect(userLicensejson.userLicense).to.equal("Salesforce");
+    expect(userLicensejson.userLicense).toEqual("Salesforce");
     rimraf(`${testdatapath}/decompose/test1/decomposed/*`, () => {});
   });
 });

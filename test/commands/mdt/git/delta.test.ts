@@ -1,15 +1,15 @@
 // import * as fs from "fs";
-import { expect } from "chai";
 import * as x2jParser from "fast-xml-parser";
 import { j2xParser } from "fast-xml-parser";
-import Differ from "../../../../src/commands/mdt/git/delta";
+import {
+  metadataToJSArray,
+  diffChangesInMetadata,
+} from "../../../../src/utils/delta";
 import { j2xOptions } from "../../../../src/config/fastXMLOptions";
 
 describe("mdt:git:delta", () => {
   it("metadataToJSArray", async () => {
-    const differ = new Differ([], null);
-
-    const result = differ.metadataToJSArray(
+    const result = metadataToJSArray(
       {
         CustomLabels: {
           labels: [
@@ -26,15 +26,13 @@ describe("mdt:git:delta", () => {
       },
       "CustomLabels"
     );
-    expect(result.length).to.equal(2);
-    expect(JSON.parse(result[0]).tagName).to.equal("labels");
-    expect(JSON.parse(result[0]).fullName).to.equal("label1");
+    expect(result.length).toEqual(2);
+    expect(JSON.parse(result[0]).tagName).toEqual("labels");
+    expect(JSON.parse(result[0]).fullName).toEqual("label1");
   });
   it("diffMetadata", async () => {
-    const differ = new Differ([], null);
-
     const json2xmlParser = new j2xParser(j2xOptions);
-    const result = differ.diffMetadata(
+    const result = diffChangesInMetadata(
       json2xmlParser.parse({
         CustomLabels: {
           labels: [
@@ -72,8 +70,8 @@ describe("mdt:git:delta", () => {
         },
       }),
       "CustomLabels",
-      ""
+      (array, item) => !array.includes(item)
     );
-    expect(x2jParser.parse(result).CustomLabels.labels.length).to.equal(2);
+    expect(x2jParser.parse(result).CustomLabels.labels.length).toEqual(2);
   });
 });

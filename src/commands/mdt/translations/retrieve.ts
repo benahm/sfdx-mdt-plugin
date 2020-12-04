@@ -6,7 +6,7 @@ import * as path from "path";
 import * as he from "he";
 import { j2xParser } from "fast-xml-parser";
 
-import { substringBefore } from "../../../utils/utilities";
+import { substringBefore, writeXMLFile } from "../../../utils/utilities";
 
 import { j2xOptions } from "../../../config/fastXMLOptions";
 
@@ -75,19 +75,7 @@ export default class Retriever extends SfdxCommand {
       },
     });
 
-    // write xml version & encoding
-    await fs.writeFileSync(
-      `${destpath}`,
-      '<?xml version="1.0" encoding="UTF-8"?>\n',
-      {
-        encoding: "utf8",
-      }
-    );
-
     // write xml file
-    await fs.writeFileSync(`${destpath}`, formattedXml, {
-      encoding: "utf8",
-      flag: "a",
-    });
+    await writeXMLFile(`${destpath}`, formattedXml);
   }
 }

@@ -7,6 +7,8 @@ import { j2xParser } from "fast-xml-parser";
 
 import { j2xOptions, x2jOptions } from "../../../config/fastXMLOptions";
 
+import { readFile, writeXMLFile } from "../../../utils/utilities";
+
 export default class Composer extends SfdxCommand {
   public static examples = [
     `$ sfdx mdt:customlabels:compose -p {sourcepath} -d {outputdirectory}
@@ -60,14 +62,12 @@ export default class Composer extends SfdxCommand {
     }
 
     for (const customLabelFile of customLabelsDir.sort()) {
-      let xmlData = await fs.readFileSync(inputdir + "/" + customLabelFile, {
-        encoding: "utf8",
-      });
-      if (x2jParser.validate(xmlData) === true) {
-        let jsonObj = x2jParser.parse(xmlData, x2jOptions);
-        customLabelsJSON.CustomLabels.labels.push(jsonObj.label);
+      const xmlCustomLabel = await readFile(`${inputdir}/${customLabelFile}`);
+      if (x2jParser.validate(xmlCustomLabel) === true) {
+        const jsonCustomLabel = x2jParser.parse(xmlCustomLabel, x2jOptions);
+        customLabelsJSON.CustomLabels.labels.push(jsonCustomLabel.label);
       } else {
-        throw `${inputdir + "/" + customLabelFile} is an invalid xml file`;
+        throw `${inputdir}/${customLabelFile} is an invalid xml file`;
       }
     }
 
@@ -75,18 +75,6 @@ export default class Composer extends SfdxCommand {
     const formattedXml = json2xmlParser.parse(customLabelsJSON);
 
     // write xml version & encoding
-    await fs.writeFileSync(
-      `${sourcepath}`,
-      '<?xml version="1.0" encoding="UTF-8"?>\n',
-      {
-        encoding: "utf8",
-      }
-    );
-
-    // write xml file
-    await fs.writeFileSync(`${sourcepath}`, formattedXml, {
-      encoding: "utf8",
-      flag: "a",
-    });
+    await writeXMLFile(`${sourcepath}`, formattedXml);
   }
 }
