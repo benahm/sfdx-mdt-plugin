@@ -1,7 +1,7 @@
 {
   "name": "sfdx-mdt-plugin",
   "description": "Sfdx metadata plugin",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "author": "benahm",
   "bugs": "https://github.com/benahm/sfdx-mdt-plugin/issues",
   "dependencies": {
@@ -64,7 +64,7 @@
   "scripts": {
     "lint": "tslint --project . --config tslint.json --format stylish",
     "postpack": "rimraf oclif.manifest.json",
-    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "prepack": "rimraf lib && oclif-dev manifest && oclif-dev readme",
     "test": "jest",
     "testwatch": "jest --watch",
     "version": "oclif-dev readme && git add README.md"
