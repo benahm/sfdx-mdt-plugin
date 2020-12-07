@@ -14,10 +14,12 @@ export default class Activator extends SfdxCommand {
   protected static flagsConfig = {
     objectname: flags.string({
       char: "o",
+      required: true,
       description: "The salesforce object name",
     }),
     rulename: flags.string({
       char: "r",
+      required: true,
       description: "The rule name",
     }),
   };

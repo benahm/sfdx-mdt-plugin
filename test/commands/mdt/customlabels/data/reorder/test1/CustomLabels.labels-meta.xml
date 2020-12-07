@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
-        <fullName>label1</fullName>
-        <categories>test</categories>
-        <language>en_US</language>
-        <protected>false</protected>
-        <shortDescription>label</shortDescription>
-        <value>label1</value>
-    </labels>
-    <labels>
         <fullName>label2</fullName>
         <categories>test</categories>
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>label</shortDescription>
         <value>label2</value>
+    </labels>
+    <labels>
+        <fullName>label1</fullName>
+        <categories>test</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>label</shortDescription>
+        <value>label1</value>
     </labels>
 </CustomLabels>

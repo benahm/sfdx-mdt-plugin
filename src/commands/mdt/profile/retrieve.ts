@@ -18,12 +18,13 @@ export default class Retriever extends SfdxCommand {
   protected static flagsConfig = {
     sourcepath: flags.string({
       char: "p",
+      required: true,
       description: "The path to the source metadata profile file",
     }),
     outputdir: flags.string({
       char: "d",
       description:
-        "The input directory that stores the decomposed metadata files",
+        "The output directory where to store the profile metadata file",
     }),
   };
 

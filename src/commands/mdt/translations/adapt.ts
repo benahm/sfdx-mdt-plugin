@@ -20,12 +20,13 @@ export default class Adapter extends SfdxCommand {
   protected static flagsConfig = {
     sourcepath: flags.string({
       char: "p",
+      required: true,
       description: "The path to the source metadata file",
     }),
     outputdir: flags.string({
       char: "d",
       description:
-        "The output directory to store the decomposed metadata files",
+        "The output directory where to store the translations metadata file",
     }),
   };
 
