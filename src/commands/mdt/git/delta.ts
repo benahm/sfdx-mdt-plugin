@@ -155,6 +155,7 @@ export default class Differ extends SfdxCommand {
           if (isRecordTypePatern.test(`${folderPath}`)) {
             await copyDiffOfComplexMetadata(
               from,
+              to,
               `${metadataFilePath}`,
               {
                 rootTagName: "RecordType",
@@ -218,6 +219,7 @@ export default class Differ extends SfdxCommand {
         case `${FMD_FOLDER}/labels`:
           await copyDiffOfComplexMetadata(
             from,
+            to,
             `${metadataFilePath}`,
             { rootTagName: "CustomLabels", requiredTagNames: [] },
             `${packagedir}`,
@@ -228,6 +230,7 @@ export default class Differ extends SfdxCommand {
         case `${FMD_FOLDER}/profiles`:
           await copyDiffOfComplexMetadata(
             from,
+            to,
             `${metadataFilePath}`,
             { rootTagName: "Profile", requiredTagNames: [] },
             `${packagedir}`
@@ -237,6 +240,7 @@ export default class Differ extends SfdxCommand {
         case `${FMD_FOLDER}/permissionsets`:
           await copyDiffOfComplexMetadata(
             from,
+            to,
             `${metadataFilePath}`,
             { rootTagName: "PermissionSet", requiredTagNames: [] },
             `${packagedir}`
@@ -246,6 +250,7 @@ export default class Differ extends SfdxCommand {
         case `${FMD_FOLDER}/sharingRules`:
           await copyDiffOfComplexMetadata(
             from,
+            to,
             `${metadataFilePath}`,
             { rootTagName: "SharingRules", requiredTagNames: [] },
             `${packagedir}`,
@@ -256,6 +261,7 @@ export default class Differ extends SfdxCommand {
         case `${FMD_FOLDER}/assignmentRules`:
           await copyDiffOfComplexMetadata(
             from,
+            to,
             `${metadataFilePath}`,
             { rootTagName: "AssignmentRules", requiredTagNames: [] },
             `${packagedir}`,
@@ -266,6 +272,7 @@ export default class Differ extends SfdxCommand {
         case `${FMD_FOLDER}/autoResponseRules`:
           await copyDiffOfComplexMetadata(
             from,
+            to,
             `${metadataFilePath}`,
             { rootTagName: "AutoResponseRules", requiredTagNames: [] },
             `${packagedir}`,
@@ -276,6 +283,7 @@ export default class Differ extends SfdxCommand {
         case `${FMD_FOLDER}/matchingRules`:
           await copyDiffOfComplexMetadata(
             from,
+            to,
             `${metadataFilePath}`,
             { rootTagName: "MatchingRules", requiredTagNames: [] },
             `${packagedir}`,
@@ -286,6 +294,7 @@ export default class Differ extends SfdxCommand {
         case `${FMD_FOLDER}/translations`:
           await copyDiffOfComplexMetadata(
             from,
+            to,
             `${metadataFilePath}`,
             { rootTagName: "Translations", requiredTagNames: [] },
             `${packagedir}`
@@ -295,6 +304,7 @@ export default class Differ extends SfdxCommand {
         case `${FMD_FOLDER}/workflows`:
           await copyDiffOfComplexMetadata(
             from,
+            to,
             `${metadataFilePath}`,
             { rootTagName: "Workflow", requiredTagNames: [] },
             `${packagedir}`,

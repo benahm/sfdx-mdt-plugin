@@ -1,4 +1,3 @@
-import * as fs from "fs";
 import { spawn } from "child_process";
 import * as x2jParser from "fast-xml-parser";
 import { j2xParser } from "fast-xml-parser";
@@ -122,28 +121,27 @@ const gitShow = async (commit, sourcepath) => {
 
 /**
  * copy complex metadata diffs
- * @param commit
+ * @param from
+ * @param to
  * @param sourcepath
  * @param metadataInfo
  * @param packageDir
  * @param destructiveDir
  */
 const copyDiffOfComplexMetadata = async (
-  commit,
+  from,
+  to,
   sourcepath,
   metadataInfo,
   packageDir,
   destructiveDir?
 ) => {
-  const xmlMetadata1 = await fs.readFileSync(`${sourcepath}`, {
-    encoding: "utf8",
-  });
-
-  const xmlMetadata2 = await gitShow(commit, sourcepath);
+  const xmlMetadata1 = await gitShow(from, sourcepath);
+  const xmlMetadata2 = await gitShow(to, sourcepath);
 
   const xmlDiffMetadata = diffChangesInMetadata(
-    xmlMetadata1,
     xmlMetadata2,
+    xmlMetadata1,
     metadataInfo.rootTagName,
     (array, item, itemTagName) =>
       !array.includes(item) ||
@@ -154,8 +152,8 @@ const copyDiffOfComplexMetadata = async (
 
   if (destructiveDir) {
     const xmlDeletedMetadata = diffChangesInMetadata(
-      xmlMetadata2,
       xmlMetadata1,
+      xmlMetadata2,
       metadataInfo.rootTagName,
       (array, item, itemTagName) =>
         (!array.includes(item) &&
