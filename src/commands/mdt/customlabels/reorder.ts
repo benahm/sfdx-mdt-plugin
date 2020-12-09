@@ -11,7 +11,7 @@ import { readFile, writeXMLFile } from "../../../utils/utilities";
 export default class Orderer extends SfdxCommand {
   public static examples = [
     `$ sfdx mdt:customlabels:reorder -p {sourcepath} 
-  Reorder Custom Labels xml file to multiple custom label files
+  Reorder Custom Labels xml file
   `,
   ];
 
