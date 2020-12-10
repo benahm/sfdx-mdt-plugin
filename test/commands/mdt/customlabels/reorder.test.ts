@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as rimraf from "rimraf";
 import * as x2jParser from "fast-xml-parser";
 import Orderer from "../../../../src/commands/mdt/customlabels/reorder";
 import { x2jOptions } from "../../../../src/config/fastXMLOptions";
@@ -8,6 +9,10 @@ const testdatapath = "test/commands/mdt/customlabels/data";
 describe("mdt:customlabels:reorder", () => {
   it("reorder test 1", async () => {
     const orderer = new Orderer([], null);
+
+    if (!fs.existsSync(`${testdatapath}/reorder/test1/result`)) {
+      await fs.mkdirSync(`${testdatapath}/reorder/test1/result`);
+    }
 
     await orderer.reorder(
       `${testdatapath}/reorder/test1/CustomLabels.labels-meta.xml`,
@@ -25,8 +30,6 @@ describe("mdt:customlabels:reorder", () => {
     expect(jsonObj.CustomLabels.labels.length).toEqual(2);
     expect(jsonObj.CustomLabels.labels[0].fullName).toEqual("label1");
     expect(jsonObj.CustomLabels.labels[1].fullName).toEqual("label2");
-    await fs.unlinkSync(
-      `${testdatapath}/reorder/test1/result/CustomLabels.labels-meta.xml`
-    );
+    rimraf(`${testdatapath}/reorder/test1/result/*`, () => {});
   });
 });

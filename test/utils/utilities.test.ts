@@ -1,55 +1,40 @@
-import {
-  profileAccessNameMap,
-  profileAccessFilenamesCompare,
-} from "../../src/utils/utilities";
+import { profileAccessFilenamesCompare } from "../../src/utils/utilities";
 
 describe("utility tests", () => {
-  it("profileAccessNameMap", async () => {
-    expect(
-      profileAccessNameMap["applicationVisibilities"]({ application: "MyApp" })
-    ).toEqual("MyApp");
-
-    expect(profileAccessNameMap["custom"]()).toEqual("custom");
-    expect(
-      profileAccessNameMap["layoutAssignments"]({ layout: "MyLayout" })
-    ).toEqual("MyLayout");
-    expect(
-      profileAccessNameMap["layoutAssignments"]({
-        layout: "MyLayout",
-        recordType: "MyRecordType",
-      })
-    ).toEqual("MyLayout.MyRecordType");
-    expect(
-      profileAccessNameMap["loginIpRanges"]({
-        startAddress: "1.1.1.1",
-        endAddress: "255.255.255.255",
-      })
-    ).toEqual("001.001.001.001.255.255.255.255");
-  });
-
   it("profileAccessFilenamesCompare", async () => {
     expect(
-      profileAccessFilenamesCompare("ApexClass.Class2", "ApexClass.Class1")
+      profileAccessFilenamesCompare(
+        "classAccesses",
+        { apexClass: "Class2" },
+        { apexClass: "Class1" }
+      )
     ).toEqual(1);
     expect(
-      profileAccessFilenamesCompare("ApexClass.Class1", "ApexClass.Class2")
-    ).toEqual(-1);
-    expect(
       profileAccessFilenamesCompare(
-        "LayoutAssignments.Layout1",
-        "LayoutAssignments.Layout2"
+        "classAccesses",
+        { apexClass: "Class1" },
+        { apexClass: "Class2" }
       )
     ).toEqual(-1);
     expect(
       profileAccessFilenamesCompare(
-        "LayoutAssignments.Layout1",
-        "LayoutAssignments.Layout2.recordType2"
+        "layoutAssignments",
+        { layout: "Layout1" },
+        { layout: "Layout2" }
       )
     ).toEqual(-1);
     expect(
       profileAccessFilenamesCompare(
-        "LayoutAssignments.LayoutA.recordTypeA",
-        "LayoutAssignments.LayoutAb.recordTypeA"
+        "layoutAssignments",
+        { layout: "Layout1" },
+        { layout: "Layout2", recordType: "recordType2" }
+      )
+    ).toEqual(-1);
+    expect(
+      profileAccessFilenamesCompare(
+        "layoutAssignments",
+        { layout: "LayoutA", recordType: "recordTypeA" },
+        { layout: "LayoutAb", recordType: "recordTypeA" }
       )
     ).toEqual(-1);
   });
