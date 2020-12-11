@@ -1,9 +1,9 @@
-import { spawn } from "child_process";
+import { spawn, execSync } from "child_process";
 import * as x2jParser from "fast-xml-parser";
 import { j2xParser } from "fast-xml-parser";
 import { j2xOptions, x2jOptions } from "../config/fastXMLOptions";
 
-import { writeXMLFile } from "./utilities";
+import { readFile, writeXMLFile } from "./utilities";
 
 /**
  * metadata to JS Array
@@ -120,6 +120,37 @@ const gitShow = async (commit, sourcepath) => {
 };
 
 /**
+ * git diff
+ * @param from
+ * @param to
+ */
+const gitDiff = async (from, to) => {
+  const coreQuotePath = await execSync(`git config core.quotePath`);
+  await execSync(`git config core.quotePath false`);
+  console.log("to", to);
+  const diffArgs = to
+    ? ["diff", "--name-status", from, to]
+    : ["diff", "--name-status", from];
+  const gitDiff = spawn("git", diffArgs);
+  return new Promise(async (resolve, reject) => {
+    let output: string = "";
+
+    gitDiff.stdout.on("data", (data) => {
+      output += data;
+    });
+
+    gitDiff.on("error", (error) => {
+      reject(`error: ${error.message}`);
+    });
+
+    gitDiff.on("close", async (code) => {
+      await execSync(`git config core.quotePath ${coreQuotePath}`);
+      resolve(output);
+    });
+  });
+};
+
+/**
  * copy complex metadata diffs
  * @param from
  * @param to
@@ -137,7 +168,12 @@ const copyDiffOfComplexMetadata = async (
   destructiveDir?
 ) => {
   const xmlMetadata1 = await gitShow(from, sourcepath);
-  const xmlMetadata2 = await gitShow(to, sourcepath);
+  let xmlMetadata2;
+  if (to) {
+    xmlMetadata2 = await gitShow(to, sourcepath);
+  } else {
+    xmlMetadata2 = await readFile(`${sourcepath}`);
+  }
 
   const xmlDiffMetadata = diffChangesInMetadata(
     xmlMetadata2,
@@ -170,5 +206,6 @@ export {
   metadataToJSArray,
   diffChangesInMetadata,
   gitShow,
+  gitDiff,
   copyDiffOfComplexMetadata,
 };

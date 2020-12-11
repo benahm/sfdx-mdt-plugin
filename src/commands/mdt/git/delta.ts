@@ -1,6 +1,5 @@
 import { flags, SfdxCommand } from "@salesforce/command";
 import { AnyJson } from "@salesforce/ts-types";
-import { execSync } from "child_process";
 import * as chalk from "chalk";
 import * as fs from "fs";
 
@@ -12,7 +11,11 @@ import {
   mkdirRecursive,
   writeFile,
 } from "../../../utils/utilities";
-import { gitShow, copyDiffOfComplexMetadata } from "../../../utils/delta";
+import {
+  gitShow,
+  gitDiff,
+  copyDiffOfComplexMetadata,
+} from "../../../utils/delta";
 
 const FMD_FOLDER = "force-app/main/default";
 
@@ -73,12 +76,10 @@ export default class Differ extends SfdxCommand {
    * @param destructivedir
    */
   public async delta(from, to, packagedir, destructivedir) {
-    const gitDiffList = execSync(
-      `git diff --name-status ${from} ${to}`
-    ).toString();
+    const gitDiffList = await gitDiff(from, to);
     const changedMetadataFilePathList = [];
     const deletedMetadataFilePathList = [];
-    gitDiffList.split("\n").forEach((diffFileLine) => {
+    `${gitDiffList}`.split("\n").forEach((diffFileLine) => {
       const diffFileParts = diffFileLine.split(/\t/);
       if (diffFileParts.length > 1 && diffFileParts[1].startsWith(FMD_FOLDER)) {
         switch (diffFileParts[0].charAt(0)) {
