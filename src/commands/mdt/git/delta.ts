@@ -10,6 +10,7 @@ import {
   substringBefore,
   mkdirRecursive,
   writeFile,
+  copyFile,
 } from "../../../utils/utilities";
 import {
   gitShow,
@@ -75,12 +76,17 @@ export default class Differ extends SfdxCommand {
    * @param packagedir
    * @param destructivedir
    */
-  public async delta(from, to, packagedir, destructivedir) {
-    const gitDiffList = await gitDiff(from, to);
-    const changedMetadataFilePathList = [];
-    const deletedMetadataFilePathList = [];
-    `${gitDiffList}`.split("\n").forEach((diffFileLine) => {
-      const diffFileParts = diffFileLine.split(/\t/);
+  public async delta(
+    from: string,
+    to: string,
+    packagedir: string,
+    destructivedir: string
+  ) {
+    const gitDiffList: string = await gitDiff(from, to);
+    const changedMetadataFilePathList: string[] = [];
+    const deletedMetadataFilePathList: string[] = [];
+    gitDiffList.split("\n").forEach((diffFileLine) => {
+      const diffFileParts: string[] = diffFileLine.split(/\t/);
       if (diffFileParts.length > 1 && diffFileParts[1].startsWith(FMD_FOLDER)) {
         switch (diffFileParts[0].charAt(0)) {
           case "D":
@@ -116,7 +122,7 @@ export default class Differ extends SfdxCommand {
         await mkdirRecursive(
           `${destructivedir}/${substringBeforeLast(metadataFilePath, "/")}`
         );
-        const fileContent = await gitShow(from, metadataFilePath);
+        const fileContent: string = await gitShow(from, metadataFilePath);
         await writeFile(`${destructivedir}/${metadataFilePath}`, fileContent);
       }
     }
@@ -130,8 +136,8 @@ export default class Differ extends SfdxCommand {
         );
       }
 
-      const folderPath = substringBeforeLast(metadataFilePath, "/");
-      const metadataFolderPath = substringBeforeNthChar(
+      const folderPath: string = substringBeforeLast(metadataFilePath, "/");
+      const metadataFolderPath: string = substringBeforeNthChar(
         metadataFilePath,
         "/",
         4
@@ -141,7 +147,7 @@ export default class Differ extends SfdxCommand {
         case `${FMD_FOLDER}/aura`:
           const auraFileNames = fs.readdirSync(`${folderPath}`);
           for (const auraFileName of auraFileNames) {
-            await fs.copyFileSync(
+            await copyFile(
               `${folderPath}/${auraFileName}`,
               `${packagedir}/${folderPath}/${auraFileName}`
             );
@@ -165,7 +171,7 @@ export default class Differ extends SfdxCommand {
               `${packagedir}`
             );
           } else {
-            await fs.copyFileSync(
+            await copyFile(
               `${metadataFilePath}`,
               `${packagedir}/${metadataFilePath}`
             );
@@ -174,11 +180,11 @@ export default class Differ extends SfdxCommand {
         /** handle object translations */
         case `${FMD_FOLDER}/objectTranslations`:
           const objTraFolderName = substringAfterLast(folderPath, "/");
-          await fs.copyFileSync(
+          await copyFile(
             `${folderPath}/${objTraFolderName}.objectTranslation-meta.xml`,
             `${packagedir}/${folderPath}/${objTraFolderName}.objectTranslation-meta.xml`
           );
-          await fs.copyFileSync(
+          await copyFile(
             `${metadataFilePath}`,
             `${packagedir}/${metadataFilePath}`
           );
@@ -195,7 +201,7 @@ export default class Differ extends SfdxCommand {
               subFolderPath + "/",
               "/"
             );
-            await fs.copyFileSync(
+            await copyFile(
               `${staticResourceFolder}/${resourceFolderName}.resource-meta.xml`,
               `${packagedir}/${staticResourceFolder}/${resourceFolderName}.resource-meta.xml`
             );
@@ -205,13 +211,13 @@ export default class Differ extends SfdxCommand {
                 substringAfterLast(metadataFilePath, "/"),
                 "."
               );
-              await fs.copyFileSync(
+              await copyFile(
                 `${folderPath}/${resourceName}.resource-meta.xml`,
                 `${packagedir}/${folderPath}/${resourceName}.resource-meta.xml`
               );
             }
           }
-          await fs.copyFileSync(
+          await copyFile(
             `${metadataFilePath}`,
             `${packagedir}/${metadataFilePath}`
           );
@@ -314,7 +320,7 @@ export default class Differ extends SfdxCommand {
           break;
         /** handle all other metadata */
         default:
-          await fs.copyFileSync(
+          await copyFile(
             `${metadataFilePath}`,
             `${packagedir}/${metadataFilePath}`
           );
@@ -323,11 +329,8 @@ export default class Differ extends SfdxCommand {
 
       /** copy meta file if exists */
       const metaFileName = `${metadataFilePath}-meta.xml`;
-      if (await fs.existsSync(`${metaFileName}`)) {
-        await fs.copyFileSync(
-          `${metaFileName}`,
-          `${packagedir}/${metaFileName}`
-        );
+      if (fs.existsSync(`${metaFileName}`)) {
+        await copyFile(`${metaFileName}`, `${packagedir}/${metaFileName}`);
       }
     }
   }

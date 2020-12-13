@@ -49,12 +49,15 @@ export default class Retriever extends SfdxCommand {
     return { success: true };
   }
 
-  public async retrieve(sourcepath, outputdir) {
+  public async retrieve(sourcepath: string, outputdir: string) {
     const json2xmlParser = new j2xParser(j2xOptions);
     j2xOptions.tagValueProcessor = (a) => he.escape(a);
     const conn = this.org.getConnection();
-    const languageCode = substringBefore(path.basename(sourcepath), ".");
-    const destpath = outputdir
+    const languageCode: string = substringBefore(
+      path.basename(sourcepath),
+      "."
+    );
+    const destpath: string = outputdir
       ? `${outputdir}/${languageCode}.translation-meta.xml`
       : sourcepath;
 
@@ -67,7 +70,7 @@ export default class Retriever extends SfdxCommand {
       encoding: "utf8",
     });
 
-    let formattedXml = json2xmlParser.parse({
+    const formattedXml: string = json2xmlParser.parse({
       Translations: {
         "@": {
           xmlns: "http://soap.sforce.com/2006/04/metadata",

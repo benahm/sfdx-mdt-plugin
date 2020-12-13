@@ -5,7 +5,12 @@
  * @param rulename
  * @param status
  */
-const updateWorkflowRuleStatus = async (conn, objectname, rulename, status) => {
+const updateWorkflowRuleStatus = async (
+  conn,
+  objectname: string,
+  rulename: string,
+  status: boolean
+): Promise<void> => {
   // read workflows from org
   const workflowJSON = await conn.metadata.readSync("Workflow", [objectname]);
 

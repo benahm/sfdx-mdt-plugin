@@ -42,8 +42,8 @@ export default class Orderer extends SfdxCommand {
   }
 
   public async reorder(sourcepath, outputdir) {
-    const customLabelsXML = await readFile(sourcepath);
-    const destpath = outputdir
+    const customLabelsXML: string = await readFile(sourcepath);
+    const destpath: string = outputdir
       ? `${outputdir}/CustomLabels.labels-meta.xml`
       : sourcepath;
 
@@ -60,7 +60,7 @@ export default class Orderer extends SfdxCommand {
       const json2xmlParser = new j2xParser(j2xOptions);
 
       // parse json to xml
-      const formattedXml = json2xmlParser.parse(customLabelsJSON);
+      const formattedXml: string = json2xmlParser.parse(customLabelsJSON);
 
       // write xml version & encoding
       await writeXMLFile(`${destpath}`, formattedXml);

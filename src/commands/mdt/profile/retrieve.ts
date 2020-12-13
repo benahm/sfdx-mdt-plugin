@@ -47,18 +47,18 @@ export default class Retriever extends SfdxCommand {
     return { success: true };
   }
 
-  public async retrieve(sourcepath, outputdir) {
+  public async retrieve(sourcepath: string, outputdir: string) {
     const json2xmlParser = new j2xParser(j2xOptions);
     const conn = this.org.getConnection();
-    const profileName = substringBefore(path.basename(sourcepath), ".");
-    const destpath = outputdir
+    const profileName: string = substringBefore(path.basename(sourcepath), ".");
+    const destpath: string = outputdir
       ? `${outputdir}/${profileName}.profile.meta.xml`
       : sourcepath;
 
     // read profile from org
     const profileJSON = await conn.metadata.readSync("Profile", [profileName]);
 
-    let formattedXml = json2xmlParser.parse({
+    const formattedXml: string = json2xmlParser.parse({
       Profile: {
         "@": {
           xmlns: "http://soap.sforce.com/2006/04/metadata",

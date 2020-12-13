@@ -10,8 +10,8 @@ import { readFile, writeXMLFile } from "./utilities";
  * @param jsonContent
  * @param rootTagName
  */
-const metadataToJSArray = (jsonContent, rootTagName) => {
-  let arrayContent = [];
+const metadataToJSArray = (jsonContent, rootTagName: string): string[] => {
+  let arrayContent: string[] = [];
   for (const subTagName in jsonContent[rootTagName]) {
     const subNode = jsonContent[rootTagName][subTagName];
 
@@ -57,11 +57,15 @@ const metadataToJSArray = (jsonContent, rootTagName) => {
  * @param requiredTagNames
  */
 const diffChangesInMetadata = (
-  xmlVersion1,
-  xmlVersion2,
-  rootTagName,
-  compareFunction
-) => {
+  xmlVersion1: string,
+  xmlVersion2: string,
+  rootTagName: string,
+  compareFunction: (
+    array: string[],
+    item: string,
+    itemTagName: string
+  ) => boolean
+): string => {
   const json2xmlParser = new j2xParser(j2xOptions);
   const jsonVersion1 = x2jParser.parse(`${xmlVersion1}`, x2jOptions);
   const jsonVersion2 = x2jParser.parse(`${xmlVersion2}`, x2jOptions);
@@ -71,8 +75,8 @@ const diffChangesInMetadata = (
   const diffJSON = {};
   for (const item of arrayOfVersion1) {
     const jsonItem = JSON.parse(item);
-    const itemTagName = jsonItem.tagName;
-    const itemTagType = jsonItem.tagType;
+    const itemTagName: string = jsonItem.tagName;
+    const itemTagType: string = jsonItem.tagType;
 
     delete jsonItem.tagName;
     delete jsonItem.tagType;
@@ -91,7 +95,9 @@ const diffChangesInMetadata = (
       diffJSON[itemTagName] = jsonItem;
     }
   }
-  const xmlDiffMetadata = json2xmlParser.parse({ [rootTagName]: diffJSON });
+  const xmlDiffMetadata: string = json2xmlParser.parse({
+    [rootTagName]: diffJSON,
+  });
   return xmlDiffMetadata;
 };
 
@@ -100,10 +106,10 @@ const diffChangesInMetadata = (
  * @param commit
  * @param sourcepath
  */
-const gitShow = async (commit, sourcepath) => {
+const gitShow = async (commit: string, sourcepath: string): Promise<string> => {
   const gitShow = spawn("git", ["show", `${commit}:${sourcepath}`]);
   return new Promise((resolve, reject) => {
-    let fileContent = "";
+    let fileContent: string = "";
 
     gitShow.stdout.on("data", (data) => {
       fileContent += data;
@@ -124,10 +130,9 @@ const gitShow = async (commit, sourcepath) => {
  * @param from
  * @param to
  */
-const gitDiff = async (from, to) => {
+const gitDiff = async (from: string, to: string): Promise<string> => {
   const coreQuotePath = await execSync(`git config core.quotePath`);
   await execSync(`git config core.quotePath false`);
-  console.log("to", to);
   const diffArgs = to
     ? ["diff", "--name-status", from, to]
     : ["diff", "--name-status", from];
@@ -160,15 +165,15 @@ const gitDiff = async (from, to) => {
  * @param destructiveDir
  */
 const copyDiffOfComplexMetadata = async (
-  from,
-  to,
-  sourcepath,
-  metadataInfo,
-  packageDir,
-  destructiveDir?
+  from: string,
+  to: string,
+  sourcepath: string,
+  metadataInfo: { rootTagName: string; requiredTagNames: string[] },
+  packageDir: string,
+  destructiveDir?: string
 ) => {
-  const xmlMetadata1 = await gitShow(from, sourcepath);
-  let xmlMetadata2;
+  const xmlMetadata1: string = await gitShow(from, sourcepath);
+  let xmlMetadata2: string;
   if (to) {
     xmlMetadata2 = await gitShow(to, sourcepath);
   } else {

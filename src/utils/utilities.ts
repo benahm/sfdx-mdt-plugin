@@ -6,7 +6,11 @@ import * as fs from "fs";
  * @param access1
  * @param access2
  */
-const profileAccessFilenamesCompare = (accessType, access1, access2) => {
+const profileAccessFilenamesCompare = (
+  accessType: string,
+  access1,
+  access2
+) => {
   switch (accessType) {
     case "applicationVisibilities":
       return access1["application"] > access2["application"] ? 1 : -1;
@@ -73,7 +77,7 @@ const profileAccessFilenamesCompare = (accessType, access1, access2) => {
  * Add leading zero to ip address numbers
  * @param ip
  */
-const normalizeIP = (ip) =>
+const normalizeIP = (ip: string): string =>
   ip
     .split(".")
     .map((part) => part.padStart(3, "0"))
@@ -84,14 +88,15 @@ const normalizeIP = (ip) =>
  * @param text
  * @param char
  */
-const substringBefore = (text, char) => text.substring(0, text.indexOf(char));
+const substringBefore = (text: string, char: string): string =>
+  text.substring(0, text.indexOf(char));
 
 /**
  * Substring from a text before given char
  * @param text
  * @param char
  */
-const substringBeforeLast = (text, char) =>
+const substringBeforeLast = (text: string, char: string): string =>
   text.substring(0, text.lastIndexOf(char));
 
 /**
@@ -99,43 +104,33 @@ const substringBeforeLast = (text, char) =>
  * @param text
  * @param char
  */
-const substringBeforeNthChar = (text, char, n) =>
-  text.split(char).slice(0, n).join(char);
+const substringBeforeNthChar = (
+  text: string,
+  char: string,
+  n: number
+): string => text.split(char).slice(0, n).join(char);
 
 /**
  * Substring from a text after given char
  * @param text
  * @param char
  */
-const substringAfter = (text, char) => text.substring(text.indexOf(char) + 1);
+const substringAfter = (text: string, char: string): string =>
+  text.substring(text.indexOf(char) + 1);
 
 /**
  * Substring from a text before given char
  * @param text
  * @param char
  */
-const substringAfterLast = (text, char) =>
+const substringAfterLast = (text: string, char: string): string =>
   text.substring(text.lastIndexOf(char) + 1);
-
-/**
- * Capitalize first letter of a string
- * @param string
- */
-const capitalizeFirstLetter = (string) =>
-  string.charAt(0).toUpperCase() + string.slice(1);
-
-/**
- * Uncapitalize first letter of a string
- * @param string
- */
-const uncapitalizeFirstLetter = (string) =>
-  string.charAt(0).toLowerCase() + string.slice(1);
 
 /**
  *
  * @param path
  */
-const mkdirRecursive = async (path) => {
+const mkdirRecursive = async (path: string): Promise<void> => {
   await fs.mkdirSync(path, {
     recursive: true,
   });
@@ -145,7 +140,7 @@ const mkdirRecursive = async (path) => {
  *
  * @param path
  */
-const readFile = async (path) => {
+const readFile = async (path: string): Promise<string> => {
   return await fs.readFileSync(path, {
     encoding: "utf8",
   });
@@ -155,7 +150,7 @@ const readFile = async (path) => {
  *
  * @param path
  */
-const writeFile = async (path, content) => {
+const writeFile = async (path: string, content: string): Promise<void> => {
   await fs.writeFileSync(path, content, {
     encoding: "utf8",
   });
@@ -165,7 +160,7 @@ const writeFile = async (path, content) => {
  *
  * @param path
  */
-const writeXMLFile = async (path, content) => {
+const writeXMLFile = async (path: string, content: string): Promise<void> => {
   await fs.writeFileSync(path, '<?xml version="1.0" encoding="UTF-8"?>\n', {
     encoding: "utf8",
   });
@@ -176,17 +171,32 @@ const writeXMLFile = async (path, content) => {
   });
 };
 
+/**
+ * copy a file
+ * @param sourcepath
+ * @param destpath
+ */
+const copyFile = async (
+  sourcepath: string,
+  destpath: string
+): Promise<void> => {
+  if (fs.existsSync(sourcepath)) {
+    await fs.copyFileSync(`${sourcepath}`, `${destpath}`);
+  } else {
+    throw `Error file ${sourcepath} not found`;
+  }
+};
+
 export {
   substringBefore,
   substringBeforeLast,
   substringBeforeNthChar,
   substringAfter,
   substringAfterLast,
-  capitalizeFirstLetter,
-  uncapitalizeFirstLetter,
   profileAccessFilenamesCompare,
   mkdirRecursive,
   readFile,
   writeFile,
   writeXMLFile,
+  copyFile,
 };

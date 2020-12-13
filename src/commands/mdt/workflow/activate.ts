@@ -44,7 +44,7 @@ export default class Activator extends SfdxCommand {
   }
 
   public async activate(objectname, rulename) {
-    updateWorkflowRuleStatus(
+    await updateWorkflowRuleStatus(
       this.org.getConnection(),
       objectname,
       rulename,

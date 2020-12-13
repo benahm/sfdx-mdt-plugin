@@ -5,8 +5,8 @@
  */
 const listMetadataTypeFullNames = async (
   conn,
-  metadataTypeName,
-  folderName?
+  metadataTypeName: string,
+  folderName?: string
 ) => {
   const listMetadataQuery = folderName
     ? { type: metadataTypeName, folder: folderName }
@@ -30,9 +30,9 @@ const listMetadataTypeFullNames = async (
 const filterMetadataTypeTag = async (
   conn,
   metadataJSON,
-  tagName,
-  metadataType,
-  getTagFullName
+  tagName: string,
+  metadataType: string,
+  getTagFullName: (any) => string
 ) => {
   const profileAccess = metadataJSON[tagName];
   if (profileAccess) {

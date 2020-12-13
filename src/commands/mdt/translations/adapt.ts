@@ -1,12 +1,15 @@
 import { flags, SfdxCommand } from "@salesforce/command";
 import { AnyJson } from "@salesforce/ts-types";
 import * as chalk from "chalk";
-import * as fs from "fs";
 import * as path from "path";
 import * as x2jParser from "fast-xml-parser";
 import { j2xParser } from "fast-xml-parser";
 
-import { substringBefore, writeXMLFile } from "../../../utils/utilities";
+import {
+  substringBefore,
+  readFile,
+  writeXMLFile,
+} from "../../../utils/utilities";
 import { filterMetadataTypeTag } from "../../../utils/adapt";
 import { j2xOptions, x2jOptions } from "../../../config/fastXMLOptions";
 
@@ -49,13 +52,14 @@ export default class Adapter extends SfdxCommand {
     return { success: true };
   }
 
-  public async adapt(sourcepath, outputdir) {
-    const translationsXMLData = await fs.readFileSync(sourcepath, {
-      encoding: "utf8",
-    });
+  public async adapt(sourcepath: string, outputdir: string) {
+    const translationsXMLData: string = await readFile(sourcepath);
     const json2xmlParser = new j2xParser(j2xOptions);
-    const languageCode = substringBefore(path.basename(sourcepath), ".");
-    const destpath = outputdir
+    const languageCode: string = substringBefore(
+      path.basename(sourcepath),
+      "."
+    );
+    const destpath: string = outputdir
       ? `${outputdir}/${languageCode}.translation-meta.xml`
       : sourcepath;
     let translationsJSON;

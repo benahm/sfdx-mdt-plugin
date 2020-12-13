@@ -47,10 +47,10 @@ export default class Orderer extends SfdxCommand {
     return { success: true };
   }
 
-  public async reorder(sourcepath, outputdir) {
-    const profileXML = await readFile(sourcepath);
-    const profileName = substringBefore(path.basename(sourcepath), ".");
-    const destpath = outputdir
+  public async reorder(sourcepath: string, outputdir: string) {
+    const profileXML: string = await readFile(sourcepath);
+    const profileName: string = substringBefore(path.basename(sourcepath), ".");
+    const destpath: string = outputdir
       ? `${outputdir}/${profileName}.profile-meta.xml`
       : sourcepath;
 
@@ -74,7 +74,7 @@ export default class Orderer extends SfdxCommand {
       const json2xmlParser = new j2xParser(j2xOptions);
 
       // parse json to xml
-      const formattedXml = json2xmlParser.parse(profileJSON);
+      const formattedXml: string = json2xmlParser.parse(profileJSON);
 
       // write xml version & encoding
       await writeXMLFile(`${destpath}`, formattedXml);
