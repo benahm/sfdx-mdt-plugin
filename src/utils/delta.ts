@@ -1,4 +1,4 @@
-import { spawn, exec } from "child_process";
+import { spawn, execSync } from "child_process";
 import * as x2jParser from "fast-xml-parser";
 import { j2xParser } from "fast-xml-parser";
 import { j2xOptions, x2jOptions } from "../config/fastXMLOptions";
@@ -131,8 +131,10 @@ const gitShow = async (commit: string, sourcepath: string): Promise<string> => {
  * @param to
  */
 const gitDiff = async (from: string, to: string): Promise<string> => {
-  const coreQuotePath = await exec(`git config --get core.quotePath`);
-  await exec(`git config core.quotePath false`);
+  const coreQuotePath = await execSync(`git config --get core.quotePath`, {
+    encoding: "utf8",
+  });
+  await execSync(`git config core.quotePath false`);
   const diffArgs = to
     ? ["diff", "--name-status", from, to]
     : ["diff", "--name-status", from];
@@ -150,9 +152,9 @@ const gitDiff = async (from: string, to: string): Promise<string> => {
 
     gitDiff.on("close", async (code) => {
       if (coreQuotePath) {
-        await exec(`git config core.quotePath ${coreQuotePath}`);
+        await execSync(`git config core.quotePath ${coreQuotePath}`);
       } else {
-        await exec(`git config --unset core.quotePath`);
+        await execSync(`git config --unset core.quotePath`);
       }
       resolve(output);
     });
