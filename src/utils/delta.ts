@@ -131,9 +131,14 @@ const gitShow = async (commit: string, sourcepath: string): Promise<string> => {
  * @param to
  */
 const gitDiff = async (from: string, to: string): Promise<string> => {
-  const coreQuotePath = await execSync(`git config --get core.quotePath`, {
-    encoding: "utf8",
-  });
+  let coreQuotePath;
+  try {
+    coreQuotePath = await execSync(
+      `git config --get core.quotePath`
+    ).toString();
+  } catch (e) {
+    // ignore if error
+  }
   await execSync(`git config core.quotePath false`);
   const diffArgs = to
     ? ["diff", "--name-status", from, to]
