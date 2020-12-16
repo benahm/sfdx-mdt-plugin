@@ -127,7 +127,7 @@ const substringAfterLast = (text: string, char: string): string =>
   text.substring(text.lastIndexOf(char) + 1);
 
 /**
- *
+ * Create directories recursively
  * @param path
  */
 const mkdirRecursive = async (path: string): Promise<void> => {
@@ -137,7 +137,7 @@ const mkdirRecursive = async (path: string): Promise<void> => {
 };
 
 /**
- *
+ * Read a file
  * @param path
  */
 const readFile = async (path: string): Promise<string> => {
@@ -147,7 +147,7 @@ const readFile = async (path: string): Promise<string> => {
 };
 
 /**
- *
+ * Write a file
  * @param path
  */
 const writeFile = async (path: string, content: string): Promise<void> => {
@@ -157,7 +157,7 @@ const writeFile = async (path: string, content: string): Promise<void> => {
 };
 
 /**
- *
+ * Write an xml file
  * @param path
  */
 const writeXMLFile = async (path: string, content: string): Promise<void> => {
@@ -172,7 +172,7 @@ const writeXMLFile = async (path: string, content: string): Promise<void> => {
 };
 
 /**
- * copy a file
+ * Copy a file
  * @param sourcepath
  * @param destpath
  */
@@ -183,7 +183,7 @@ const copyFile = async (
   if (fs.existsSync(sourcepath)) {
     await fs.copyFileSync(`${sourcepath}`, `${destpath}`);
   } else {
-    throw `Error file ${sourcepath} not found`;
+    throw `Error file "${sourcepath}" not found`;
   }
 };
 
