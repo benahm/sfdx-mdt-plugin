@@ -24,7 +24,7 @@ const x2jOptions = {
   trimValues: true,
   cdataTagName: "__cdata",
   cdataPositionChar: "\\c",
-  parseTrueNumberOnly: false,
+  parseTrueNumberOnly: true,
   arrayMode: false,
   stopNodes: ["parse-me-as-string"],
   tagValueProcessor: (a) => a,

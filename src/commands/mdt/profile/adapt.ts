@@ -52,6 +52,11 @@ export default class Adapter extends SfdxCommand {
     return { success: true };
   }
 
+  /**
+   * adapt profile
+   * @param sourcepath
+   * @param outputdir
+   */
   public async adapt(sourcepath: string, outputdir: string) {
     const profileXMLData: string = await readFile(sourcepath);
     const json2xmlParser = new j2xParser(j2xOptions);
@@ -201,7 +206,8 @@ export default class Adapter extends SfdxCommand {
   }
 
   /**
-   *
+   * filter user permission tags
+   * @param conn
    * @param profile
    * @param profileAccessName
    */
