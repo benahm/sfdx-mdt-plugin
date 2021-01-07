@@ -166,7 +166,7 @@ export default class Differ extends SfdxCommand {
               `${metadataFilePath}`,
               {
                 rootTagName: "RecordType",
-                requiredTagNames: ["fullName", "active", "label"],
+                requiredTagNames: ["fullName", "active", "label", "businessProcess"],
               },
               `${packagedir}`
             );
