@@ -27,7 +27,7 @@ export default class Activator extends SfdxCommand {
   protected static requiresUsername = true;
 
   public async run(): Promise<AnyJson> {
-    this.ux.startSpinner(chalk.yellowBright("Activating"));
+    this.ux.startSpinner(chalk.yellowBright("Deactivating"));
 
     try {
       await this.activate(this.flags.objectname, this.flags.rulename);
