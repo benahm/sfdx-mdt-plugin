@@ -83,40 +83,11 @@ export default class Differ extends SfdxCommand {
     destructivedir: string
   ) {
     const gitDiffList: string = await gitDiff(from, to);
-    const changedMetadataFilePathList: string[] = [];
-    const deletedMetadataFilePathList: string[] = [];
-    gitDiffList.split("\n").forEach((diffFileLine) => {
-      const diffFileParts: string[] = diffFileLine.split(/\t/);
-      if (diffFileParts.length > 1 && diffFileParts[1].startsWith(FMD_FOLDER)) {
-        switch (diffFileParts[0].charAt(0)) {
-          case "D":
-            console.log(
-              chalk.green(diffFileParts[1]) + " " + chalk.redBright("DELETED")
-            );
-            deletedMetadataFilePathList.push(diffFileParts[1]);
-            break;
-          case "R":
-            console.log(
-              chalk.green(diffFileParts[1]) +
-                " " +
-                chalk.whiteBright("RENAMED TO") +
-                " " +
-                chalk.green(diffFileParts[2])
-            );
-            deletedMetadataFilePathList.push(diffFileParts[1]);
-            changedMetadataFilePathList.push(diffFileParts[2]);
-            break;
-          default:
-            console.log(
-              chalk.green(diffFileParts[1]) +
-                " " +
-                chalk.yellowBright("MODIFIED")
-            );
-            changedMetadataFilePathList.push(diffFileParts[1]);
-            break;
-        }
-      }
-    });
+    const {
+      changedMetadataFilePathList,
+      deletedMetadataFilePathList,
+    } = this.generateDiffLists(gitDiffList);
+    
     if (destructivedir) {
       for (const metadataFilePath of deletedMetadataFilePathList) {
         await mkdirRecursive(
@@ -166,7 +137,12 @@ export default class Differ extends SfdxCommand {
               `${metadataFilePath}`,
               {
                 rootTagName: "RecordType",
-                requiredTagNames: ["fullName", "active", "label", "businessProcess"],
+                requiredTagNames: [
+                  "fullName",
+                  "active",
+                  "label",
+                  "businessProcess",
+                ],
               },
               `${packagedir}`
             );
@@ -332,6 +308,57 @@ export default class Differ extends SfdxCommand {
       if (fs.existsSync(`${metaFileName}`)) {
         await copyFile(`${metaFileName}`, `${packagedir}/${metaFileName}`);
       }
+
+      /** copy non meta file if only meta file was modified */
+      if (metadataFilePath.endsWith("-meta.xml")) {
+        const metaXMLIndex = metadataFilePath.indexOf("-meta.xml");
+        const metadataFile = metadataFilePath.substring(0, metaXMLIndex);
+        if (fs.existsSync(`${metadataFile}`)) {
+          await copyFile(`${metadataFile}`, `${packagedir}/${metadataFile}`);
+        }
+      }
     }
+  }
+
+  /**
+   * generate diff lists
+   * @param gitDiffList 
+   */
+  private generateDiffLists(gitDiffList: string) {
+    const changedMetadataFilePathList: string[] = [];
+    const deletedMetadataFilePathList: string[] = [];
+    gitDiffList.split("\n").forEach((diffFileLine) => {
+      const diffFileParts: string[] = diffFileLine.split(/\t/);
+      if (diffFileParts.length > 1 && diffFileParts[1].startsWith(FMD_FOLDER)) {
+        switch (diffFileParts[0].charAt(0)) {
+          case "D":
+            console.log(
+              chalk.green(diffFileParts[1]) + " " + chalk.redBright("DELETED")
+            );
+            deletedMetadataFilePathList.push(diffFileParts[1]);
+            break;
+          case "R":
+            console.log(
+              chalk.green(diffFileParts[1]) +
+                " " +
+                chalk.whiteBright("RENAMED TO") +
+                " " +
+                chalk.green(diffFileParts[2])
+            );
+            deletedMetadataFilePathList.push(diffFileParts[1]);
+            changedMetadataFilePathList.push(diffFileParts[2]);
+            break;
+          default:
+            console.log(
+              chalk.green(diffFileParts[1]) +
+                " " +
+                chalk.yellowBright("MODIFIED")
+            );
+            changedMetadataFilePathList.push(diffFileParts[1]);
+            break;
+        }
+      }
+    });
+    return { changedMetadataFilePathList, deletedMetadataFilePathList };
   }
 }
