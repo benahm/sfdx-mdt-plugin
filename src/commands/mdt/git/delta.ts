@@ -87,7 +87,7 @@ export default class Differ extends SfdxCommand {
       changedMetadataFilePathList,
       deletedMetadataFilePathList,
     } = this.generateDiffLists(gitDiffList);
-    
+
     if (destructivedir) {
       for (const metadataFilePath of deletedMetadataFilePathList) {
         await mkdirRecursive(
@@ -225,7 +225,10 @@ export default class Differ extends SfdxCommand {
             from,
             to,
             `${metadataFilePath}`,
-            { rootTagName: "PermissionSet", requiredTagNames: [] },
+            {
+              rootTagName: "PermissionSet",
+              requiredTagNames: ["label"],
+            },
             `${packagedir}`
           );
           break;
@@ -322,7 +325,7 @@ export default class Differ extends SfdxCommand {
 
   /**
    * generate diff lists
-   * @param gitDiffList 
+   * @param gitDiffList
    */
   private generateDiffLists(gitDiffList: string) {
     const changedMetadataFilePathList: string[] = [];
