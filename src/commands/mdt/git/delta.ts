@@ -101,11 +101,6 @@ export default class Differ extends SfdxCommand {
       await mkdirRecursive(
         `${packagedir}/${substringBeforeLast(metadataFilePath, "/")}`
       );
-      if (destructivedir) {
-        await mkdirRecursive(
-          `${destructivedir}/${substringBeforeLast(metadataFilePath, "/")}`
-        );
-      }
 
       const folderPath: string = substringBeforeLast(metadataFilePath, "/");
       const metadataFolderPath: string = substringBeforeNthChar(

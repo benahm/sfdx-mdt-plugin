@@ -70,6 +70,7 @@ describe("mdt:git:delta", () => {
         },
       }),
       "CustomLabels",
+      [],
       (array, item) => !array.includes(item)
     );
     expect(x2jParser.parse(result).CustomLabels.labels.length).toEqual(2);

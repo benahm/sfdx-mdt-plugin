@@ -3,7 +3,12 @@ import * as x2jParser from "fast-xml-parser";
 import { j2xParser } from "fast-xml-parser";
 import { j2xOptions, x2jOptions } from "../config/fastXMLOptions";
 
-import { readFile, writeXMLFile } from "./utilities";
+import {
+  readFile,
+  writeXMLFile,
+  mkdirRecursive,
+  substringBeforeLast,
+} from "./utilities";
 
 /**
  * metadata to JS Array
@@ -55,11 +60,13 @@ const metadataToJSArray = (jsonContent, rootTagName: string): string[] => {
  * @param xmlversion2
  * @param rootTagName
  * @param requiredTagNames
+ * @param compareFunction
  */
 const diffChangesInMetadata = (
   xmlVersion1: string,
   xmlVersion2: string,
   rootTagName: string,
+  requiredTagNames: string[],
   compareFunction: (
     array: string[],
     item: string,
@@ -73,6 +80,7 @@ const diffChangesInMetadata = (
   const arrayOfVersion2 = metadataToJSArray(jsonVersion2, rootTagName);
 
   const diffJSON = {};
+  let noDiffFound = true;
   for (const item of arrayOfVersion1) {
     const jsonItem = JSON.parse(item);
     const itemTagName: string = jsonItem.tagName;
@@ -90,10 +98,17 @@ const diffChangesInMetadata = (
           diffJSON[itemTagName] = [jsonItem];
         }
       }
+      if (!requiredTagNames.includes(itemTagName)) {
+        noDiffFound = false;
+      }
     }
     if (itemTagName === "@") {
       diffJSON[itemTagName] = jsonItem;
     }
+  }
+  // no diff (only the @ property & requiredTagNames)
+  if (noDiffFound) {
+    return "";
   }
   const xmlDiffMetadata: string = json2xmlParser.parse({
     [rootTagName]: diffJSON,
@@ -195,18 +210,22 @@ const copyDiffOfComplexMetadata = async (
     xmlMetadata2,
     xmlMetadata1,
     metadataInfo.rootTagName,
+    metadataInfo.requiredTagNames,
     (array, item, itemTagName) =>
       !array.includes(item) ||
       metadataInfo.requiredTagNames.includes(itemTagName)
   );
 
-  await writeXMLFile(`${packageDir}/${sourcepath}`, xmlDiffMetadata);
+  if (xmlDiffMetadata) {
+    await writeXMLFile(`${packageDir}/${sourcepath}`, xmlDiffMetadata);
+  }
 
   if (destructiveDir) {
     const xmlDeletedMetadata = diffChangesInMetadata(
       xmlMetadata1,
       xmlMetadata2,
       metadataInfo.rootTagName,
+      metadataInfo.requiredTagNames,
       (array, item, itemTagName) =>
         (!array.includes(item) &&
           array.filter(
@@ -214,7 +233,12 @@ const copyDiffOfComplexMetadata = async (
           ).length === 0) ||
         metadataInfo.requiredTagNames.includes(itemTagName)
     );
-    await writeXMLFile(`${destructiveDir}/${sourcepath}`, xmlDeletedMetadata);
+    if (xmlDeletedMetadata) {
+      await mkdirRecursive(
+        `${destructiveDir}/${substringBeforeLast(sourcepath, "/")}`
+      );
+      await writeXMLFile(`${destructiveDir}/${sourcepath}`, xmlDeletedMetadata);
+    }
   }
 };
 
