@@ -66,10 +66,6 @@ export default class Retriever extends SfdxCommand {
       languageCode,
     ]);
 
-    await fs.writeFileSync(`trads.json`, JSON.stringify(translationsJSON), {
-      encoding: "utf8",
-    });
-
     const formattedXml: string = json2xmlParser.parse({
       Translations: {
         "@": {
