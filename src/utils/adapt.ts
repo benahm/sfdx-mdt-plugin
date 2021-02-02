@@ -1,5 +1,6 @@
 /**
  * list metadata type full names
+ * @param conn
  * @param metadataTypeName
  * @param folderName
  */
@@ -22,30 +23,32 @@ const listMetadataTypeFullNames = async (
 };
 
 /**
- *
- * @param profileJSON
- * @param profileAccessName
+ * filter metadata type tags
+ * @param conn
+ * @param metadataJSON
+ * @param tagName
  * @param metadataType
+ * @param filterMetadata
  */
 const filterMetadataTypeTag = async (
   conn,
   metadataJSON,
   tagName: string,
   metadataType: string,
-  getTagFullName: (any) => string
+  filterMetadata: (metadataTypeList: any[], metaStubJSON: any[]) => boolean
 ) => {
-  const profileAccess = metadataJSON[tagName];
-  if (profileAccess) {
+  const metadataStubJSON = metadataJSON[tagName];
+  if (metadataStubJSON) {
     const metadataTypeFullNames = await listMetadataTypeFullNames(
       conn,
       metadataType
     );
-    const profileAccessList = Array.isArray(profileAccess)
-      ? profileAccess
-      : [profileAccess];
+    const metadataStubJSONList = Array.isArray(metadataStubJSON)
+      ? metadataStubJSON
+      : [metadataStubJSON];
 
-    metadataJSON[tagName] = profileAccessList.filter((profileAccess) =>
-      metadataTypeFullNames.includes(getTagFullName(profileAccess))
+    metadataJSON[tagName] = metadataStubJSONList.filter((metadataStubJSON) =>
+      filterMetadata(metadataTypeFullNames, metadataStubJSON)
     );
     console.log(`${tagName} ✔️`);
   }

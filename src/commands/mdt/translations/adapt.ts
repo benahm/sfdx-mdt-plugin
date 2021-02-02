@@ -72,7 +72,8 @@ export default class Adapter extends SfdxCommand {
         translationsJSON.Translations,
         "customApplications",
         "CustomApplication",
-        (translation) => translation["name"]
+        (metadataTypeList, translation) =>
+          metadataTypeList.includes(translation["name"])
       );
 
       await filterMetadataTypeTag(
@@ -80,7 +81,8 @@ export default class Adapter extends SfdxCommand {
         translationsJSON.Translations,
         "customLabels",
         "CustomLabel",
-        (translation) => translation["name"]
+        (metadataTypeList, translation) =>
+          metadataTypeList.includes(translation["name"])
       );
 
       await filterMetadataTypeTag(
@@ -88,7 +90,8 @@ export default class Adapter extends SfdxCommand {
         translationsJSON.Translations,
         "customPageWebLinks",
         "CustomPageWebLink",
-        (translation) => translation["name"]
+        (metadataTypeList, translation) =>
+          metadataTypeList.includes(translation["name"])
       );
 
       await filterMetadataTypeTag(
@@ -96,7 +99,8 @@ export default class Adapter extends SfdxCommand {
         translationsJSON.Translations,
         "customTabs",
         "CustomTab",
-        (translation) => translation["name"]
+        (metadataTypeList, translation) =>
+          metadataTypeList.includes(translation["name"])
       );
 
       await filterMetadataTypeTag(
@@ -104,7 +108,8 @@ export default class Adapter extends SfdxCommand {
         translationsJSON.Translations,
         "flowDefinitions",
         "Flow",
-        (translation) => translation["name"]
+        (metadataTypeList, translation) =>
+          metadataTypeList.includes(translation["name"])
       );
 
       await filterMetadataTypeTag(
@@ -112,7 +117,8 @@ export default class Adapter extends SfdxCommand {
         translationsJSON.Translations,
         "globalPicklists",
         "GlobalPicklist",
-        (translation) => translation["name"]
+        (metadataTypeList, translation) =>
+          metadataTypeList.includes(translation["name"])
       );
 
       await filterMetadataTypeTag(
@@ -120,7 +126,8 @@ export default class Adapter extends SfdxCommand {
         translationsJSON.Translations,
         "prompts",
         "Prompt",
-        (translation) => translation["name"]
+        (metadataTypeList, translation) =>
+          metadataTypeList.includes(translation["name"])
       );
 
       await filterMetadataTypeTag(
@@ -128,7 +135,8 @@ export default class Adapter extends SfdxCommand {
         translationsJSON.Translations,
         "quickActions",
         "QuickAction",
-        (translation) => translation["name"]
+        (metadataTypeList, translation) =>
+          metadataTypeList.includes(translation["name"])
       );
 
       await filterMetadataTypeTag(
@@ -136,7 +144,8 @@ export default class Adapter extends SfdxCommand {
         translationsJSON.Translations,
         "reportTypes",
         "ReportType",
-        (translation) => translation["name"]
+        (metadataTypeList, translation) =>
+          metadataTypeList.includes(translation["name"])
       );
 
       await filterMetadataTypeTag(
@@ -144,7 +153,8 @@ export default class Adapter extends SfdxCommand {
         translationsJSON.Translations,
         "scontrols",
         "Scontrol",
-        (translation) => translation["name"]
+        (metadataTypeList, translation) =>
+          metadataTypeList.includes(translation["name"])
       );
     }
 

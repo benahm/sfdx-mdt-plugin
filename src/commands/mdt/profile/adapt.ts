@@ -7,6 +7,7 @@ import { j2xParser } from "fast-xml-parser";
 
 import {
   substringBefore,
+  substringAfter,
   readFile,
   writeXMLFile,
 } from "../../../utils/utilities";
@@ -74,7 +75,8 @@ export default class Adapter extends SfdxCommand {
         profileJSON.Profile,
         "applicationVisibilities",
         "CustomApplication",
-        (profileAccess) => profileAccess["application"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["application"])
       );
 
       await filterMetadataTypeTag(
@@ -82,7 +84,8 @@ export default class Adapter extends SfdxCommand {
         profileJSON.Profile,
         "categoryGroupVisibilities",
         "DataCategoryGroup",
-        (profileAccess) => profileAccess["dataCategoryGroup"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["dataCategoryGroup"])
       );
 
       await filterMetadataTypeTag(
@@ -90,7 +93,8 @@ export default class Adapter extends SfdxCommand {
         profileJSON.Profile,
         "classAccesses",
         "ApexClass",
-        (profileAccess) => profileAccess["apexClass"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["apexClass"])
       );
 
       await filterMetadataTypeTag(
@@ -98,7 +102,8 @@ export default class Adapter extends SfdxCommand {
         profileJSON.Profile,
         "customMetadataTypeAccesses",
         "CustomObject",
-        (profileAccess) => profileAccess["name"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["name"])
       );
 
       await filterMetadataTypeTag(
@@ -106,7 +111,8 @@ export default class Adapter extends SfdxCommand {
         profileJSON.Profile,
         "customPermissions",
         "CustomPermission",
-        (profileAccess) => profileAccess["name"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["name"])
       );
 
       await filterMetadataTypeTag(
@@ -114,7 +120,8 @@ export default class Adapter extends SfdxCommand {
         profileJSON.Profile,
         "customSettingAccesses",
         "CustomObject",
-        (profileAccess) => profileAccess["name"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["name"])
       );
 
       await filterMetadataTypeTag(
@@ -122,15 +129,20 @@ export default class Adapter extends SfdxCommand {
         profileJSON.Profile,
         "externalDataSourceAccesses",
         "ExternalDataSource",
-        (profileAccess) => profileAccess["externalDataSource"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["externalDataSource"])
       );
 
+      // metadata api limitation
+      // standard fields not listed in the CustomField metadata
       await filterMetadataTypeTag(
         this.org.getConnection(),
         profileJSON.Profile,
         "fieldPermissions",
         "CustomField",
-        (profileAccess) => profileAccess["field"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["field"]) ||
+          !substringAfter(profileAccess["field"], ",").includes("__") // don't filter standard fields
       );
 
       await filterMetadataTypeTag(
@@ -138,7 +150,8 @@ export default class Adapter extends SfdxCommand {
         profileJSON.Profile,
         "flowAccesses",
         "Flow",
-        (profileAccess) => profileAccess["flow"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["flow"])
       );
 
       await filterMetadataTypeTag(
@@ -146,7 +159,8 @@ export default class Adapter extends SfdxCommand {
         profileJSON.Profile,
         "layoutAssignments",
         "Layout",
-        (profileAccess) => profileAccess["layout"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["layout"])
       );
 
       await filterMetadataTypeTag(
@@ -154,7 +168,8 @@ export default class Adapter extends SfdxCommand {
         profileJSON.Profile,
         "layoutAssignments",
         "RecordType",
-        (profileAccess) => profileAccess["recordType"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["recordType"])
       );
 
       await filterMetadataTypeTag(
@@ -162,7 +177,8 @@ export default class Adapter extends SfdxCommand {
         profileJSON.Profile,
         "objectPermissions",
         "CustomObject",
-        (profileAccess) => profileAccess["object"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["object"])
       );
 
       await filterMetadataTypeTag(
@@ -170,7 +186,8 @@ export default class Adapter extends SfdxCommand {
         profileJSON.Profile,
         "pageAccesses",
         "ApexPage",
-        (profileAccess) => profileAccess["apexPage"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["apexPage"])
       );
 
       await filterMetadataTypeTag(
@@ -178,17 +195,20 @@ export default class Adapter extends SfdxCommand {
         profileJSON.Profile,
         "recordTypeVisibilities",
         "RecordType",
-        (profileAccess) => profileAccess["recordType"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["recordType"])
       );
 
       // metadata api limitation
-      // standard tabs are ignored because can not be listed
+      // standard tabs not listed in the CustomTab metadata
       await filterMetadataTypeTag(
         this.org.getConnection(),
         profileJSON.Profile,
         "tabVisibilities",
         "CustomTab",
-        (profileAccess) => profileAccess["tab"]
+        (metadataTypeList, profileAccess) =>
+          metadataTypeList.includes(profileAccess["tab"]) ||
+          profileAccess["tab"].startsWith("standard-") // don't filter standard tabs
       );
 
       await this.filterUserPermissionTag(
