@@ -121,7 +121,12 @@ export default class Differ extends SfdxCommand {
           break;
         /** handle experience bundles */
         case `${FMD_FOLDER}/experiences`:
-          const expFileNames = fs.readdirSync(`${folderPath}`);
+          const metadataTypeFolderPath: string = substringBeforeNthChar(
+            metadataFilePath,
+            "/",
+            5
+          );
+          const expFileNames = fs.readdirSync(`${metadataTypeFolderPath}`);
           for (const expFileName of expFileNames) {
             await copyFile(
               `${folderPath}/${expFileName}`,
