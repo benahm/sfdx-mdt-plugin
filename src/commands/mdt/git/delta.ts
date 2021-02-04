@@ -126,12 +126,17 @@ export default class Differ extends SfdxCommand {
             "/",
             5
           );
-          const expFileNames = fs.readdirSync(`${metadataTypeFolderPath}`);
-          for (const expFileName of expFileNames) {
-            await copyFile(
-              `${folderPath}/${expFileName}`,
-              `${packagedir}/${folderPath}/${expFileName}`
+          const expDirNames = fs.readdirSync(`${metadataTypeFolderPath}`);
+          for (const expDirName of expDirNames) {
+            const expFileNames = fs.readdirSync(
+              `${metadataTypeFolderPath}/${expDirName}`
             );
+            for (const expFileName of expFileNames) {
+              await copyFile(
+                `${metadataTypeFolderPath}/${expDirName}/${expFileName}`,
+                `${packagedir}/${metadataTypeFolderPath}/${expDirName}/${expFileName}`
+              );
+            }
           }
           break;
         /** handle objects */
