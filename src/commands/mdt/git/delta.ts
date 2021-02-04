@@ -132,6 +132,9 @@ export default class Differ extends SfdxCommand {
               `${metadataTypeFolderPath}/${expDirName}`
             );
             for (const expFileName of expFileNames) {
+              await mkdirRecursive(
+                `${packagedir}/${metadataTypeFolderPath}/${expDirName}`
+              );
               await copyFile(
                 `${metadataTypeFolderPath}/${expDirName}/${expFileName}`,
                 `${packagedir}/${metadataTypeFolderPath}/${expDirName}/${expFileName}`
