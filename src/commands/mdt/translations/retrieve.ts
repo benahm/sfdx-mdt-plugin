@@ -1,7 +1,6 @@
 import { flags, SfdxCommand } from "@salesforce/command";
 import { AnyJson } from "@salesforce/ts-types";
 import * as chalk from "chalk";
-import * as fs from "fs";
 import * as path from "path";
 import * as he from "he";
 import { j2xParser } from "fast-xml-parser";

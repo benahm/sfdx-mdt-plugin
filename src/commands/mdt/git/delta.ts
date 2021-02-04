@@ -119,6 +119,16 @@ export default class Differ extends SfdxCommand {
             );
           }
           break;
+        /** handle experience bundles */
+        case `${FMD_FOLDER}/experiences`:
+          const expFileNames = fs.readdirSync(`${folderPath}`);
+          for (const expFileName of expFileNames) {
+            await copyFile(
+              `${folderPath}/${expFileName}`,
+              `${packagedir}/${folderPath}/${expFileName}`
+            );
+          }
+          break;
         /** handle objects */
         case `${FMD_FOLDER}/objects`:
           const isRecordTypePatern = new RegExp(
