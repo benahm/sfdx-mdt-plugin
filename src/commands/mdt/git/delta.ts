@@ -121,14 +121,12 @@ export default class Differ extends SfdxCommand {
           break;
         /** handle experience bundles */
         case `${FMD_FOLDER}/experiences`:
-          let metadataTypeFolderPath: string;
-          if (fs.lstatSync(metadataFilePath).isDirectory()) {
-            metadataTypeFolderPath = substringBeforeNthChar(
-              metadataFilePath,
-              "/",
-              5
-            );
-          } else {
+          let metadataTypeFolderPath: string = substringBeforeNthChar(
+            metadataFilePath,
+            "/",
+            5
+          );
+          if (fs.lstatSync(metadataTypeFolderPath).isFile()) {
             metadataTypeFolderPath = substringBefore(metadataFilePath, ".");
           }
           const expDirNames = fs.readdirSync(`${metadataTypeFolderPath}`);
