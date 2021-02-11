@@ -129,6 +129,10 @@ export default class Differ extends SfdxCommand {
           if (fs.lstatSync(metadataTypeFolderPath).isFile()) {
             metadataTypeFolderPath = substringBefore(metadataFilePath, ".");
           }
+          await copyFile(
+                `${metadataTypeFolderPath}.site-meta.xml`,
+                `${packagedir}/${metadataTypeFolderPath}.site-meta.xml`
+              );
           const expDirNames = fs.readdirSync(`${metadataTypeFolderPath}`);
           for (const expDirName of expDirNames) {
             const expFileNames = fs.readdirSync(
