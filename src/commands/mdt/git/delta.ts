@@ -244,19 +244,6 @@ export default class Differ extends SfdxCommand {
             `${packagedir}`
           );
           break;
-        /** handle permission sets */
-        case `${FMD_FOLDER}/permissionsets`:
-          await copyDiffOfComplexMetadata(
-            from,
-            to,
-            `${metadataFilePath}`,
-            {
-              rootTagName: "PermissionSet",
-              requiredTagNames: ["label"],
-            },
-            `${packagedir}`
-          );
-          break;
         /** handle sharing rules */
         case `${FMD_FOLDER}/sharingRules`:
           await copyDiffOfComplexMetadata(
