@@ -119,6 +119,16 @@ export default class Differ extends SfdxCommand {
             );
           }
           break;
+        /** handle lwc components */
+        case `${FMD_FOLDER}/lwc`:
+          const lwcFileNames = fs.readdirSync(`${folderPath}`);
+          for (const lwcFileName of lwcFileNames) {
+            await copyFile(
+              `${folderPath}/${lwcFileName}`,
+              `${packagedir}/${folderPath}/${lwcFileName}`
+            );
+          }
+          break;
         /** handle experience bundles */
         case `${FMD_FOLDER}/experiences`:
           let metadataTypeFolderPath: string = substringBeforeNthChar(
