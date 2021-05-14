@@ -81,7 +81,7 @@ export default class Retriever extends SfdxCommand {
           await this.listDirectory(dirPath);
         } else {
           console.log(path.relative(DEST_FOLDER, path.join(dir, f)));
-          resolve();
+          resolve(0);
         }
       });
     });

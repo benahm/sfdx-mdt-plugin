@@ -16,7 +16,7 @@ import {
 
 export default class Orderer extends SfdxCommand {
   public static examples = [
-    `$ sfdx mdt:profile:reorder -p {sourcepath} 
+    `$ sfdx mdt:profile:reorder -p {sourcepath} [-d {outputdirectory}]
   Reorder Profile xml file
   `,
   ];

@@ -13,13 +13,17 @@ const listMetadataTypeFullNames = async (
     ? { type: metadataTypeName, folder: folderName }
     : { type: metadataTypeName };
   let metadataList = await conn.metadata.list([listMetadataQuery]);
-  if (!Array.isArray(metadataList)) {
-    metadataList = [metadataList];
+  if(metadataList){
+    if (!Array.isArray(metadataList)) {
+      metadataList = [metadataList];
+    }
+    const metadataFullNameList = metadataList.map(
+      (metadata) => metadata.fullName
+    );
+    return metadataFullNameList;
+  }else{
+    return [];
   }
-  const metadataFullNameList = metadataList.map(
-    (metadata) => metadata.fullName
-  );
-  return metadataFullNameList;
 };
 
 /**
