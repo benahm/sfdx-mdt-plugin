@@ -83,10 +83,8 @@ export default class Differ extends SfdxCommand {
     destructivedir: string
   ) {
     const gitDiffList: string = await gitDiff(from, to);
-    const {
-      changedMetadataFilePathList,
-      deletedMetadataFilePathList,
-    } = this.generateDiffLists(gitDiffList);
+    const { changedMetadataFilePathList, deletedMetadataFilePathList } =
+      this.generateDiffLists(gitDiffList);
 
     if (destructivedir) {
       for (const metadataFilePath of deletedMetadataFilePathList) {
@@ -121,12 +119,14 @@ export default class Differ extends SfdxCommand {
           break;
         /** handle lwc components */
         case `${FMD_FOLDER}/lwc`:
-          const lwcFileNames = fs.readdirSync(`${folderPath}`);
-          for (const lwcFileName of lwcFileNames) {
-            await copyFile(
-              `${folderPath}/${lwcFileName}`,
-              `${packagedir}/${folderPath}/${lwcFileName}`
-            );
+          if (folderPath !== `${FMD_FOLDER}/lwc`) {
+            const lwcFileNames = fs.readdirSync(`${folderPath}`);
+            for (const lwcFileName of lwcFileNames) {
+              await copyFile(
+                `${folderPath}/${lwcFileName}`,
+                `${packagedir}/${folderPath}/${lwcFileName}`
+              );
+            }
           }
           break;
         /** handle experience bundles */
@@ -140,9 +140,9 @@ export default class Differ extends SfdxCommand {
             metadataTypeFolderPath = substringBefore(metadataFilePath, ".");
           }
           await copyFile(
-                `${metadataTypeFolderPath}.site-meta.xml`,
-                `${packagedir}/${metadataTypeFolderPath}.site-meta.xml`
-              );
+            `${metadataTypeFolderPath}.site-meta.xml`,
+            `${packagedir}/${metadataTypeFolderPath}.site-meta.xml`
+          );
           const expDirNames = fs.readdirSync(`${metadataTypeFolderPath}`);
           for (const expDirName of expDirNames) {
             const expFileNames = fs.readdirSync(
