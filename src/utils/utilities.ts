@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as path from "path";
 
 /**
  * compare profile access file names
@@ -187,6 +188,34 @@ const copyFile = async (
   }
 };
 
+/**
+ * copy folder source recusively to folder target
+ * @param source 
+ * @param target 
+ */
+const copyFolderRecursive = async (source, target) => {
+  let files = [];
+
+  // Check if folder needs to be created or integrated
+  const targetFolder = path.join(target, path.basename(source));
+  if (!fs.existsSync(targetFolder)) {
+    fs.mkdirSync(targetFolder);
+  }
+
+  // Copy
+  if (fs.lstatSync(source).isDirectory()) {
+    files = fs.readdirSync(source);
+    for (const file of files) {
+      const curSource = path.join(source, file);
+      if (fs.lstatSync(curSource).isDirectory()) {
+        await copyFolderRecursive(curSource, targetFolder);
+      } else {
+        await copyFile(curSource, targetFolder + "/" + file);
+      }
+    }
+  }
+};
+
 export {
   substringBefore,
   substringBeforeLast,
@@ -199,4 +228,5 @@ export {
   writeFile,
   writeXMLFile,
   copyFile,
+  copyFolderRecursive,
 };

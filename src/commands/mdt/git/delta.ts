@@ -11,6 +11,7 @@ import {
   mkdirRecursive,
   writeFile,
   copyFile,
+  copyFolderRecursive,
 } from "../../../utils/utilities";
 import {
   gitShow,
@@ -204,6 +205,7 @@ export default class Differ extends SfdxCommand {
         case `${FMD_FOLDER}/staticresources`:
           const staticResourceFolder = `${FMD_FOLDER}/staticresources`;
           if (folderPath !== staticResourceFolder) {
+            // static resource of type folder
             const subFolderPath = folderPath.replace(
               staticResourceFolder + "/",
               ""
@@ -216,7 +218,12 @@ export default class Differ extends SfdxCommand {
               `${staticResourceFolder}/${resourceFolderName}.resource-meta.xml`,
               `${packagedir}/${staticResourceFolder}/${resourceFolderName}.resource-meta.xml`
             );
+            await copyFolderRecursive(
+              `${staticResourceFolder}/${resourceFolderName}`,
+              `${packagedir}/${staticResourceFolder}`
+            );
           } else {
+            // static resource of type file
             if (!metadataFilePath.endsWith(".resource-meta.xml")) {
               const resourceName = substringBeforeLast(
                 substringAfterLast(metadataFilePath, "/"),
@@ -227,11 +234,11 @@ export default class Differ extends SfdxCommand {
                 `${packagedir}/${folderPath}/${resourceName}.resource-meta.xml`
               );
             }
+            await copyFile(
+              `${metadataFilePath}`,
+              `${packagedir}/${metadataFilePath}`
+            );
           }
-          await copyFile(
-            `${metadataFilePath}`,
-            `${packagedir}/${metadataFilePath}`
-          );
           break;
         /** handle custom labels */
         case `${FMD_FOLDER}/labels`:
