@@ -14,26 +14,37 @@ const profileAccessFilenamesCompare = (
 ) => {
   switch (accessType) {
     case "applicationVisibilities":
+      if (access1["application"] === access2["application"]) return 0;
       return access1["application"] > access2["application"] ? 1 : -1;
     case "categoryGroupVisibilities":
+      if (access1["dataCategoryGroup"] === access2["dataCategoryGroup"])
+        return 0;
       return access1["dataCategoryGroup"] > access2["dataCategoryGroup"]
         ? 1
         : -1;
     case "customMetadataTypeAccesses":
+      if (access1["name"] === access2["name"]) return 0;
       return access1["name"] > access2["name"] ? 1 : -1;
     case "classAccesses":
+      if (access1["apexClass"] === access2["apexClass"]) return 0;
       return access1["apexClass"] > access2["apexClass"] ? 1 : -1;
     case "customPermissions":
+      if (access1["name"] === access2["name"]) return 0;
       return access1["name"] > access2["name"] ? 1 : -1;
     case "customSettingAccesses":
+      if (access1["name"] === access2["name"]) return 0;
       return access1["name"] > access2["name"] ? 1 : -1;
     case "externalDataSourceAccess":
+      if (access1["externalDataSource"] === access2["externalDataSource"])
+        return 0;
       return access1["externalDataSource"] > access2["externalDataSource"]
         ? 1
         : -1;
     case "fieldPermissions":
+      if (access1["field"] === access2["field"]) return 0;
       return access1["field"] > access2["field"] ? 1 : -1;
     case "flowAccesses":
+      if (access1["flow"] === access2["flow"]) return 0;
       return access1["flow"] > access2["flow"] ? 1 : -1;
     case "layoutAssignments":
       const layoutName1 = access1["layout"];
@@ -46,9 +57,19 @@ const profileAccessFilenamesCompare = (
       } else {
         if (!recordTypeName1) return -1;
         if (!recordTypeName2) return 1;
+        if (recordTypeName1 === recordTypeName2) return 0;
         return recordTypeName1 > recordTypeName2 ? 1 : -1;
       }
     case "loginIpRanges":
+      if (
+        normalizeIP(access1["startAddress"]) +
+          "." +
+          normalizeIP(access1["endAddress"]) ===
+        normalizeIP(access2["startAddress"]) +
+          "." +
+          normalizeIP(access2["endAddress"])
+      )
+        return 0;
       return normalizeIP(access1["startAddress"]) +
         "." +
         normalizeIP(access1["endAddress"]) >
@@ -58,16 +79,22 @@ const profileAccessFilenamesCompare = (
         ? 1
         : -1;
     case "objectPermissions":
+      if (access1["object"] === access2["object"]) return 0;
       return access1["object"] > access2["object"] ? 1 : -1;
     case "pageAccesses":
+      if (access1["apexPage"] === access2["apexPage"]) return 0;
       return access1["apexPage"] > access2["apexPage"] ? 1 : -1;
     case "profileActionOverrides":
+      if (access1["actionName"] === access2["actionName"]) return 0;
       return access1["actionName"] > access2["actionName"] ? 1 : -1;
     case "recordTypeVisibilities":
+      if (access1["recordType"] === access2["recordType"]) return 0;
       return access1["recordType"] > access2["recordType"] ? 1 : -1;
     case "tabVisibilities":
+      if (access1["tab"] === access2["tab"]) return 0;
       return access1["tab"] > access2["tab"] ? 1 : -1;
     case "userPermissions":
+      if (access1["name"] === access2["name"]) return 0;
       return access1["name"] > access2["name"] ? 1 : -1;
     default:
       return 0;
@@ -190,8 +217,8 @@ const copyFile = async (
 
 /**
  * copy folder source recusively to folder target
- * @param source 
- * @param target 
+ * @param source
+ * @param target
  */
 const copyFolderRecursive = async (source, target) => {
   let files = [];
