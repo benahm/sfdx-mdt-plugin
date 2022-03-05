@@ -96,14 +96,16 @@ EXAMPLE
 
 _See code: [lib\commands\mdt\customlabels\reorder.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.1/lib\commands\mdt\customlabels\reorder.js)_
 
-## `sfdx mdt:git:delta -f <string> -p <string> [-t <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+## `sfdx mdt:git:delta -f <string> -p <string> [-t <string>] [-d <string>] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 ```
 USAGE
-  $ sfdx mdt:git:delta -f <string> -p <string> [-t <string>] [-d <string>] [--json] [--loglevel 
+  $ sfdx mdt:git:delta -f <string> -p <string> [-t <string>] [-d <string>] [-a <string>] [--json] [--loglevel
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
+  -a, --additionaldir=additionaldir                                                 Comma separated list of additional
+                                                                                    directories to search for changes
   -d, --descructivedir=descructivedir                                               The output directory where to
                                                                                     generate the destructive package
 

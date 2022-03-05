@@ -19,11 +19,11 @@ import {
   copyDiffOfComplexMetadata,
 } from "../../../utils/delta";
 
-const FMD_FOLDER = "force-app/main/default";
+const FMD_FOLDER = ["force-app/main/default"];
 
 export default class Differ extends SfdxCommand {
   public static examples = [
-    `$ sfdx mdt:git:diff -f {fromCommit} [-t {toCommit}] -p {packagedirectory} [-d destructivedirectory]
+    `$ sfdx mdt:git:diff -f {fromCommit} [-t {toCommit}] -p {packagedirectory} [-d destructivedirectory] [-a {additionalDirectories}]
   Generate a delta package based on a git diff
   `,
   ];
@@ -49,6 +49,11 @@ export default class Differ extends SfdxCommand {
       description:
         "The output directory where to generate the destructive package",
     }),
+    additionaldir: flags.string({
+        char: "a",
+        description:
+            "Comma separated list of additional directories to scan",
+    }),
   };
 
   public async run(): Promise<AnyJson> {
@@ -58,7 +63,8 @@ export default class Differ extends SfdxCommand {
         this.flags.from,
         this.flags.to,
         this.flags.packagedir,
-        this.flags.descructivedir
+        this.flags.descructivedir,
+        this.flags.additionaldir
       );
     } catch (e) {
       // output error
@@ -76,13 +82,20 @@ export default class Differ extends SfdxCommand {
    * @param to
    * @param packagedir
    * @param destructivedir
+   * @param additionaldir
    */
   public async delta(
     from: string,
     to: string,
     packagedir: string,
-    destructivedir: string
+    destructivedir: string,
+    additionaldir: string
   ) {
+    if (additionaldir){
+        additionaldir.split(/,/).forEach((val) => {
+            FMD_FOLDER.push(val.trim());
+        });
+    }
     const gitDiffList: string = await gitDiff(from, to);
     const { changedMetadataFilePathList, deletedMetadataFilePathList } =
       this.generateDiffLists(gitDiffList);
@@ -361,35 +374,37 @@ export default class Differ extends SfdxCommand {
     const deletedMetadataFilePathList: string[] = [];
     gitDiffList.split("\n").forEach((diffFileLine) => {
       const diffFileParts: string[] = diffFileLine.split(/\t/);
-      if (diffFileParts.length > 1 && diffFileParts[1].startsWith(FMD_FOLDER)) {
-        switch (diffFileParts[0].charAt(0)) {
-          case "D":
-            console.log(
-              chalk.green(diffFileParts[1]) + " " + chalk.redBright("DELETED")
-            );
-            deletedMetadataFilePathList.push(diffFileParts[1]);
-            break;
-          case "R":
-            console.log(
-              chalk.green(diffFileParts[1]) +
-                " " +
-                chalk.whiteBright("RENAMED TO") +
-                " " +
-                chalk.green(diffFileParts[2])
-            );
-            deletedMetadataFilePathList.push(diffFileParts[1]);
-            changedMetadataFilePathList.push(diffFileParts[2]);
-            break;
-          default:
-            console.log(
-              chalk.green(diffFileParts[1]) +
-                " " +
-                chalk.yellowBright("MODIFIED")
-            );
-            changedMetadataFilePathList.push(diffFileParts[1]);
-            break;
-        }
-      }
+      FMD_FOLDER.forEach((FOLDER)=>{
+          if (diffFileParts.length > 1 && diffFileParts[1].startsWith(FOLDER)) {
+            switch (diffFileParts[0].charAt(0)) {
+              case "D":
+                console.log(
+                  chalk.green(diffFileParts[1]) + " " + chalk.redBright("DELETED")
+                );
+                deletedMetadataFilePathList.push(diffFileParts[1]);
+                break;
+              case "R":
+                console.log(
+                  chalk.green(diffFileParts[1]) +
+                    " " +
+                    chalk.whiteBright("RENAMED TO") +
+                    " " +
+                    chalk.green(diffFileParts[2])
+                );
+                deletedMetadataFilePathList.push(diffFileParts[1]);
+                changedMetadataFilePathList.push(diffFileParts[2]);
+                break;
+              default:
+                console.log(
+                  chalk.green(diffFileParts[1]) +
+                    " " +
+                    chalk.yellowBright("MODIFIED")
+                );
+                changedMetadataFilePathList.push(diffFileParts[1]);
+                break;
+            }
+          }
+      });
     });
     return { changedMetadataFilePathList, deletedMetadataFilePathList };
   }
