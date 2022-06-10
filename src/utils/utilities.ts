@@ -211,7 +211,7 @@ const copyFile = async (
   if (fs.existsSync(sourcepath)) {
     await fs.copyFileSync(`${sourcepath}`, `${destpath}`);
   } else {
-    throw `Error file "${sourcepath}" not found`;
+    console.log(`Warning : file "${sourcepath}" not found`);
   }
 };
 
