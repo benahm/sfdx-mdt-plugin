@@ -216,6 +216,8 @@ export default class Adapter extends SfdxCommand {
         profileJSON.Profile,
         "userPermissions"
       );
+    }else{
+      throw `${sourcepath} is an invalid xml file`;
     }
 
     // convert to xml
