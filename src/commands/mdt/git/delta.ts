@@ -23,7 +23,7 @@ const FMD_FOLDER = "force-app/main/default";
 
 export default class Differ extends SfdxCommand {
   public static examples = [
-    `$ sfdx mdt:git:diff -f {fromCommit} [-t {toCommit}] -p {packagedirectory} [-d destructivedirectory]
+    `$ sfdx mdt:git:delta -f {fromCommit} [-t {toCommit}] -p {packagedirectory} [-d destructivedirectory]
   Generate a delta package based on a git diff
   `,
   ];

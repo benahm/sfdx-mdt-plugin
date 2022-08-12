@@ -63,19 +63,19 @@ const profileAccessFilenamesCompare = (
     case "loginIpRanges":
       if (
         normalizeIP(access1["startAddress"]) +
-          "." +
-          normalizeIP(access1["endAddress"]) ===
+        "." +
+        normalizeIP(access1["endAddress"]) ===
         normalizeIP(access2["startAddress"]) +
-          "." +
-          normalizeIP(access2["endAddress"])
+        "." +
+        normalizeIP(access2["endAddress"])
       )
         return 0;
       return normalizeIP(access1["startAddress"]) +
         "." +
         normalizeIP(access1["endAddress"]) >
         normalizeIP(access2["startAddress"]) +
-          "." +
-          normalizeIP(access2["endAddress"])
+        "." +
+        normalizeIP(access2["endAddress"])
         ? 1
         : -1;
     case "objectPermissions":
@@ -160,6 +160,17 @@ const substringAfterLast = (text: string, char: string): string =>
  */
 const mkdirRecursive = async (path: string): Promise<void> => {
   await fs.mkdirSync(path, {
+    recursive: true,
+  });
+};
+
+/**
+ * delete a directory recursively
+ * @param path
+ */
+const rmRecursive = async (path: string): Promise<void> => {
+  // @ts-ignore
+  await fs.rmSync(path, {
     recursive: true,
   });
 };
@@ -251,6 +262,7 @@ export {
   substringAfterLast,
   profileAccessFilenamesCompare,
   mkdirRecursive,
+  rmRecursive,
   readFile,
   writeFile,
   writeXMLFile,
