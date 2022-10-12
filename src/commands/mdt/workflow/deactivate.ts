@@ -4,7 +4,7 @@ import * as chalk from "chalk";
 
 import { updateWorkflowRuleStatus } from "../../../utils/status";
 
-export default class Activator extends SfdxCommand {
+export default class Deactivator extends SfdxCommand {
   public static examples = [
     `$ sfdx mdt:workflow:deactivate -u {sourceOrg} -o {object} -r {rulename}
   Deactivate a workflow rule

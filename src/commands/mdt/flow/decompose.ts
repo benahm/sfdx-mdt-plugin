@@ -16,7 +16,7 @@ import {
   writeXMLFile,
 } from "../../../utils/utilities";
 
-export default class Cleaner extends SfdxCommand {
+export default class Decomposer extends SfdxCommand {
   public static examples = [
     `$ sfdx mdt:flow:decompose -p {sourcepath} [-d {outputdirectory}]
   decompose a flow xml file
@@ -85,7 +85,6 @@ export default class Cleaner extends SfdxCommand {
     if (x2jParser.validate(flowXML) === true) {
       // parse xml to json
       const flowJSON = x2jParser.parse(flowXML, x2jOptions);
-      console.log(flowJSON);
       for (const element in flowJSON.Flow) {
         const elementContent = flowJSON.Flow[element];
         if (notArrayElements.includes(element)) {

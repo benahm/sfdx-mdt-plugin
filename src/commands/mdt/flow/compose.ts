@@ -15,7 +15,7 @@ import {
   writeXMLFile,
 } from "../../../utils/utilities";
 
-export default class Cleaner extends SfdxCommand {
+export default class Composer extends SfdxCommand {
   public static examples = [
     `$ sfdx mdt:flow:compose -d {inputdirectory} [-p {targetpath}]
   compose a flow xml file
