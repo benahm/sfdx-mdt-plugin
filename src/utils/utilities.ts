@@ -63,19 +63,19 @@ const profileAccessFilenamesCompare = (
     case "loginIpRanges":
       if (
         normalizeIP(access1["startAddress"]) +
-        "." +
-        normalizeIP(access1["endAddress"]) ===
+          "." +
+          normalizeIP(access1["endAddress"]) ===
         normalizeIP(access2["startAddress"]) +
-        "." +
-        normalizeIP(access2["endAddress"])
+          "." +
+          normalizeIP(access2["endAddress"])
       )
         return 0;
       return normalizeIP(access1["startAddress"]) +
         "." +
         normalizeIP(access1["endAddress"]) >
         normalizeIP(access2["startAddress"]) +
-        "." +
-        normalizeIP(access2["endAddress"])
+          "." +
+          normalizeIP(access2["endAddress"])
         ? 1
         : -1;
     case "objectPermissions":
@@ -186,6 +186,16 @@ const readFile = async (path: string): Promise<string> => {
 };
 
 /**
+ * Read a folder
+ * @param path
+ */
+const readFolder = async (path: string): Promise<string[]> => {
+  return await fs.readdirSync(path, {
+    encoding: "utf8",
+  });
+};
+
+/**
  * Write a file
  * @param path
  */
@@ -264,6 +274,7 @@ export {
   mkdirRecursive,
   rmRecursive,
   readFile,
+  readFolder,
   writeFile,
   writeXMLFile,
   copyFile,

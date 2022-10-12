@@ -3,6 +3,7 @@ import { AnyJson } from "@salesforce/ts-types";
 import * as chalk from "chalk";
 import * as x2jParser from "fast-xml-parser";
 import * as path from "path";
+import * as fs from "fs";
 import { j2xParser } from "fast-xml-parser";
 
 import { j2xOptions, x2jOptions } from "../../../config/fastXMLOptions";
@@ -37,10 +38,7 @@ export default class Cleaner extends SfdxCommand {
   public async run(): Promise<AnyJson> {
     this.ux.startSpinner(chalk.yellowBright("Decomposing Flow"));
     try {
-      await this.decompose(
-        this.flags.sourcepath,
-        this.flags.outputdir
-      );
+      await this.decompose(this.flags.sourcepath, this.flags.outputdir);
     } catch (e) {
       // output error
       this.ux.stopSpinner("❌");
@@ -51,65 +49,91 @@ export default class Cleaner extends SfdxCommand {
     return { success: true };
   }
 
-  public async decompose(
-    sourcepath: string,
-    outputdir: string
-  ) {
+  public async decompose(sourcepath: string, outputdir: string) {
     const flowXML: string = await readFile(sourcepath);
     const flowName: string = substringBefore(path.basename(sourcepath), ".");
     const destpath: string = outputdir
       ? `${outputdir}/${flowName}`
-      : `${path.basename(sourcepath)}/${flowName}`;
+      : `${path.dirname(sourcepath)}/${flowName}`;
 
-    await rmRecursive(destpath)
-    await mkdirRecursive(destpath)
+    if (fs.existsSync(`${destpath}`)) {
+      await rmRecursive(destpath);
+    }
+    await mkdirRecursive(destpath);
 
     const json2xmlParser = new j2xParser(j2xOptions);
-    const notArrayElements = ['@', 'apiVersion', 'description', 'environments', 'fullName', 'interviewLabel', 'isAdditionalPermissionRequiredToRun', 'isTemplate', 'label', 'migratedFromWorkflowRuleName', 'processType', 'runInMode', 'start', 'startElementReference', 'status', 'triggerOrder']
-    
-    let flowBase = {}
+    const notArrayElements = [
+      "@",
+      "apiVersion",
+      "description",
+      "environments",
+      "fullName",
+      "interviewLabel",
+      "isAdditionalPermissionRequiredToRun",
+      "isTemplate",
+      "label",
+      "migratedFromWorkflowRuleName",
+      "processType",
+      "runInMode",
+      "start",
+      "startElementReference",
+      "status",
+      "triggerOrder",
+    ];
+
+    let flowBase = {};
     if (x2jParser.validate(flowXML) === true) {
       // parse xml to json
       const flowJSON = x2jParser.parse(flowXML, x2jOptions);
+      console.log(flowJSON);
       for (const element in flowJSON.Flow) {
         const elementContent = flowJSON.Flow[element];
         if (notArrayElements.includes(element)) {
-          flowBase[element] = elementContent
+          flowBase[element] = elementContent;
         } else {
-          if (Array.isArray((elementContent))) {
+          if (Array.isArray(elementContent)) {
             for (const arrElementContent of elementContent) {
-              const elementName = arrElementContent?.name
+              const elementName = arrElementContent?.name;
               if (elementName) {
                 const flowElementXML: string = json2xmlParser.parse({
-                  Flow: arrElementContent
+                  Flow: arrElementContent,
                 });
-                await writeXMLFile(`${destpath}/${element}.${elementName}.meta.xml`, flowElementXML);
+                await writeXMLFile(
+                  `${destpath}/${element}.${elementName}.meta.xml`,
+                  flowElementXML
+                );
               } else {
-                console.log(`Warning : ${element} has no name attribut`)
+                console.log(`Warning : ${element} has no name attribut`);
               }
             }
           } else {
-            const elementName = elementContent?.name
+            const elementName = elementContent?.name;
             if (elementName) {
               const flowElementXML: string = json2xmlParser.parse({
-                Flow: elementContent
+                Flow: elementContent,
               });
-              await writeXMLFile(`${destpath}/${element}.${elementName}.meta.xml`, flowElementXML);
+              await writeXMLFile(
+                `${destpath}/${element}.${elementName}.meta.xml`,
+                flowElementXML
+              );
             } else {
-              console.log(`Warning : ${element} has no name attribut`)
+              console.log(`Warning : ${element} has no name attribut`);
             }
           }
         }
       }
 
       const flowBaseXML: string = json2xmlParser.parse({
-        Flow: flowBase
+        Flow: flowBase,
       });
 
       // write xml version & encoding
-      await writeXMLFile(`${destpath}/${path.basename(sourcepath)}`, flowBaseXML);
+      await writeXMLFile(
+        `${destpath}/${path.basename(sourcepath)}`,
+        flowBaseXML
+      );
     } else {
-      throw `${flowXML} is an invalid xml file`;
+      throw `${sourcepath} is an invalid xml file`;
     }
   }
 }
