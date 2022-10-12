@@ -20,7 +20,7 @@ $ npm install -g sfdx-mdt-plugin
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-sfdx-mdt-plugin/0.5.4 win32-x64 node-v16.14.0
+sfdx-mdt-plugin/0.5.5 win32-x64 node-v16.14.0
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -84,7 +84,7 @@ EXAMPLE
      Retrieve a profile with all the accesses
 ```
 
-_See code: [lib\commands\mdt\changeset\retrieve.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.4/lib\commands\mdt\changeset\retrieve.js)_
+_See code: [lib\commands\mdt\changeset\retrieve.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.5/lib\commands\mdt\changeset\retrieve.js)_
 
 ## `sfdx mdt:customlabels:reorder -p <string> [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -110,7 +110,7 @@ EXAMPLE
      Reorder Custom Labels xml file
 ```
 
-_See code: [lib\commands\mdt\customlabels\reorder.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.4/lib\commands\mdt\customlabels\reorder.js)_
+_See code: [lib\commands\mdt\customlabels\reorder.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.5/lib\commands\mdt\customlabels\reorder.js)_
 
 ## `sfdx mdt:flow:compose -d <string> [-p <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -135,7 +135,7 @@ EXAMPLE
      compose a flow xml file
 ```
 
-_See code: [lib\commands\mdt\flow\compose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.4/lib\commands\mdt\flow\compose.js)_
+_See code: [lib\commands\mdt\flow\compose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.5/lib\commands\mdt\flow\compose.js)_
 
 ## `sfdx mdt:flow:decompose -p <string> [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -161,7 +161,7 @@ EXAMPLE
      decompose a flow xml file
 ```
 
-_See code: [lib\commands\mdt\flow\decompose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.4/lib\commands\mdt\flow\decompose.js)_
+_See code: [lib\commands\mdt\flow\decompose.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.5/lib\commands\mdt\flow\decompose.js)_
 
 ## `sfdx mdt:git:delta -f <string> -p <string> [-t <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -191,7 +191,7 @@ EXAMPLE
      Generate a delta package based on a git diff
 ```
 
-_See code: [lib\commands\mdt\git\delta.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.4/lib\commands\mdt\git\delta.js)_
+_See code: [lib\commands\mdt\git\delta.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.5/lib\commands\mdt\git\delta.js)_
 
 ## `sfdx mdt:profile:adapt -p <string> [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -223,7 +223,7 @@ EXAMPLE
        Adapt a profile to be deployed to an org
 ```
 
-_See code: [lib\commands\mdt\profile\adapt.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.4/lib\commands\mdt\profile\adapt.js)_
+_See code: [lib\commands\mdt\profile\adapt.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.5/lib\commands\mdt\profile\adapt.js)_
 
 ## `sfdx mdt:profile:clean -p <string> [-l <string>] [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -252,7 +252,7 @@ EXAMPLE
      Clean Profile xml file
 ```
 
-_See code: [lib\commands\mdt\profile\clean.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.4/lib\commands\mdt\profile\clean.js)_
+_See code: [lib\commands\mdt\profile\clean.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.5/lib\commands\mdt\profile\clean.js)_
 
 ## `sfdx mdt:profile:reorder -p <string> [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -278,7 +278,7 @@ EXAMPLE
      Reorder Profile xml file
 ```
 
-_See code: [lib\commands\mdt\profile\reorder.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.4/lib\commands\mdt\profile\reorder.js)_
+_See code: [lib\commands\mdt\profile\reorder.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.5/lib\commands\mdt\profile\reorder.js)_
 
 ## `sfdx mdt:profile:retrieve -p <string> [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -310,7 +310,7 @@ EXAMPLE
      Retrieve a profile with all the accesses
 ```
 
-_See code: [lib\commands\mdt\profile\retrieve.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.4/lib\commands\mdt\profile\retrieve.js)_
+_See code: [lib\commands\mdt\profile\retrieve.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.5/lib\commands\mdt\profile\retrieve.js)_
 
 ## `sfdx mdt:translations:adapt -p <string> [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -342,7 +342,7 @@ EXAMPLE
        Adapt a transalations to be deployed to an org
 ```
 
-_See code: [lib\commands\mdt\translations\adapt.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.4/lib\commands\mdt\translations\adapt.js)_
+_See code: [lib\commands\mdt\translations\adapt.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.5/lib\commands\mdt\translations\adapt.js)_
 
 ## `sfdx mdt:translations:retrieve -p <string> [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -374,7 +374,7 @@ EXAMPLE
      Retrieve all translations related to a given language
 ```
 
-_See code: [lib\commands\mdt\translations\retrieve.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.4/lib\commands\mdt\translations\retrieve.js)_
+_See code: [lib\commands\mdt\translations\retrieve.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.5/lib\commands\mdt\translations\retrieve.js)_
 
 ## `sfdx mdt:workflow:activate -o <string> -r <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -405,7 +405,7 @@ EXAMPLE
      Activate a workflow rule
 ```
 
-_See code: [lib\commands\mdt\workflow\activate.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.4/lib\commands\mdt\workflow\activate.js)_
+_See code: [lib\commands\mdt\workflow\activate.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.5/lib\commands\mdt\workflow\activate.js)_
 
 ## `sfdx mdt:workflow:deactivate -o <string> -r <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -436,7 +436,7 @@ EXAMPLE
      Deactivate a workflow rule
 ```
 
-_See code: [lib\commands\mdt\workflow\deactivate.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.4/lib\commands\mdt\workflow\deactivate.js)_
+_See code: [lib\commands\mdt\workflow\deactivate.js](https://github.com/benahm/sfdx-mdt-plugin/blob/v0.5.5/lib\commands\mdt\workflow\deactivate.js)_
 <!-- commandsstop -->
 * [`sfdx mdt:changeset:retrieve -n <string> [-d <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtchangesetretrieve--n-string--d-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx mdt:customlabels:reorder -p <string> [-d <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-mdtcustomlabelsreorder--p-string--d-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
