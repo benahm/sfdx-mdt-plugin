@@ -156,6 +156,8 @@ export default class Adapter extends SfdxCommand {
         (metadataTypeList, translation) =>
           metadataTypeList.includes(translation["name"])
       );
+    } else {
+      throw `${sourcepath} is an invalid xml file`;
     }
 
     // convert to xml
