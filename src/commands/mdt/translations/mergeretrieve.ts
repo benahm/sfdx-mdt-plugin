@@ -54,7 +54,7 @@ export default class Retriever extends SfdxCommand {
   }
 
   public async retrieve(sourcepath: string, outputdir: string) {
-    j2xOptions.tagValueProcessor = (a) => he.escape(a);
+    j2xOptions.tagValueProcessor = (a) => he.escape(a + "");
     const json2xmlParser = new j2xParser(j2xOptions);
     const translationsXMLData: string = await readFile(sourcepath);
     const conn = this.org.getConnection();
