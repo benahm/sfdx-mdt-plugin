@@ -1,7 +1,7 @@
 {
   "name": "sfdx-mdt-plugin",
   "description": "Sfdx metadata plugin",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "benahm",
   "bugs": "https://github.com/benahm/sfdx-mdt-plugin/issues",
   "dependencies": {
@@ -12,8 +12,7 @@
     "@salesforce/core": "^2",
     "adm-zip": "^0.5.1",
     "chalk": "^4.1.0",
-    "fast-xml-parser": "^3.17.4",
-    "he": "^1.2.0"
+    "fast-xml-parser": "^3.17.4"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
