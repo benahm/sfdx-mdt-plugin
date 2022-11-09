@@ -54,9 +54,9 @@ export default class Retriever extends SfdxCommand {
   }
 
   public async retrieve(sourcepath: string, outputdir: string) {
+    j2xOptions.tagValueProcessor = (a) => he.escape(a);
     const json2xmlParser = new j2xParser(j2xOptions);
     const translationsXMLData: string = await readFile(sourcepath);
-    j2xOptions.tagValueProcessor = (a) => he.escape(a);
     const conn = this.org.getConnection();
     const languageCode: string = substringBefore(
       path.basename(sourcepath),
@@ -87,13 +87,52 @@ export default class Retriever extends SfdxCommand {
       },
     };
 
-    const mergedTranslationsJSON = Object.assign(
-      {},
-      localTranslationsJSON,
-      retrievedTranslationsJSON
-    );
+    for (const key in localTranslationsJSON.Translations) {
+      const transItems = localTranslationsJSON.Translations[key];
+      let rTransItems = retrievedTranslationsJSON.Translations[key];
+      if (rTransItems && !Array.isArray(rTransItems)) {
+        rTransItems = [rTransItems];
+      }
+      if (Array.isArray(transItems)) {
+        let mergedItems = [];
+        for (const transItem of transItems) {
+          const itemFound = rTransItems?.find((item) => {
+            return (
+              (item.name && item.name === transItem.name) ||
+              (item.fullName && item.fullName == transItem.fullName)
+            );
+          });
+          if (itemFound) {
+            mergedItems.push(itemFound);
+          } else {
+            mergedItems.push(transItem);
+          }
+        }
+        if (rTransItems) {
+          for (const transItem of rTransItems) {
+            const itemFound = mergedItems.find((item) => {
+              return (
+                (item.name && item.name === transItem.name) ||
+                (item.fullName && item.fullName == transItem.fullName)
+              );
+            });
+            if (!itemFound) {
+              mergedItems.push(transItem);
+            }
+          }
+        }
+        localTranslationsJSON.Translations[key] = mergedItems.sort((a, b) => {
+          if (a.name && b.name) {
+            return a.name > b.name ? 1 : -1;
+          }
+          if (a.fullName && b.fullName) {
+            return a.fullName > b.fullName ? 1 : -1;
+          }
+        });
+      }
+    }
 
-    const formattedXml: string = json2xmlParser.parse(mergedTranslationsJSON);
+    const formattedXml: string = json2xmlParser.parse(localTranslationsJSON);
 
     // write xml file
     await writeXMLFile(`${destpath}`, formattedXml);
