@@ -241,7 +241,10 @@ const copyFile = async (
  * @param source
  * @param target
  */
-const copyFolderRecursive = async (source, target) => {
+const copyFolderRecursive = async (
+  source: string,
+  target: string
+): Promise<void> => {
   let files = [];
 
   // Check if folder needs to be created or integrated
@@ -264,6 +267,43 @@ const copyFolderRecursive = async (source, target) => {
   }
 };
 
+/**
+ * escape xml
+ * @param value
+ * @returns
+ */
+const escapeXML = (value: string): string => {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+};
+
+/**
+ * unescape xml
+ * @param value
+ * @returns
+ */
+const unescapeXML = (value: string): string => {
+  return value
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'");
+};
+
+/**
+ * check if a value is an object
+ * @param value
+ * @returns
+ */
+const isObject = (value): boolean => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+};
+
 export {
   substringBefore,
   substringBeforeLast,
@@ -279,4 +319,7 @@ export {
   writeXMLFile,
   copyFile,
   copyFolderRecursive,
+  escapeXML,
+  unescapeXML,
+  isObject,
 };

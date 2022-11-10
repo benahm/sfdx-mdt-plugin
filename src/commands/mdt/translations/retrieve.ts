@@ -4,7 +4,11 @@ import * as chalk from "chalk";
 import * as path from "path";
 import { j2xParser } from "fast-xml-parser";
 
-import { substringBefore, writeXMLFile } from "../../../utils/utilities";
+import {
+  substringBefore,
+  writeXMLFile,
+  escapeXML,
+} from "../../../utils/utilities";
 
 import { j2xOptions } from "../../../config/fastXMLOptions";
 
@@ -49,15 +53,7 @@ export default class Retriever extends SfdxCommand {
 
   public async retrieve(sourcepath: string, outputdir: string) {
     // escape xml
-    j2xOptions.tagValueProcessor = (a) => {
-      return a
-        .toString()
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&apos;");
-    };
+    j2xOptions.tagValueProcessor = (a) => escapeXML(a.toString());
     const json2xmlParser = new j2xParser(j2xOptions);
     const conn = this.org.getConnection();
     const languageCode: string = substringBefore(
@@ -72,6 +68,21 @@ export default class Retriever extends SfdxCommand {
     const translationsJSON = await conn.metadata.readSync("Translations", [
       languageCode,
     ]);
+
+    // sort
+    for (const key in translationsJSON) {
+      const transItems = translationsJSON[key];
+      if (Array.isArray(transItems)) {
+        translationsJSON[key] = transItems.sort((a, b) => {
+          if (a.name && b.name) {
+            return a.name > b.name ? 1 : -1;
+          }
+          if (a.fullNtransItemsame && b.fullName) {
+            return a.fullName > b.fullName ? 1 : -1;
+          }
+        });
+      }
+    }
 
     const formattedXml: string = json2xmlParser.parse({
       Translations: {

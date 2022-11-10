@@ -9,6 +9,9 @@ import {
   substringBefore,
   readFile,
   writeXMLFile,
+  escapeXML,
+  unescapeXML,
+  isObject,
 } from "../../../utils/utilities";
 
 import { j2xOptions, x2jOptions } from "../../../config/fastXMLOptions";
@@ -54,15 +57,11 @@ export default class Retriever extends SfdxCommand {
 
   public async retrieve(sourcepath: string, outputdir: string) {
     // escape xml
-    j2xOptions.tagValueProcessor = (a) => {
-      return a
-        .toString()
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&apos;");
-    };
+    j2xOptions.tagValueProcessor = (a) => escapeXML(a.toString());
+
+    // unescape xml
+    x2jOptions.tagValueProcessor = (a) => unescapeXML(a.toString());
+
     const json2xmlParser = new j2xParser(j2xOptions);
     const translationsXMLData: string = await readFile(sourcepath);
     const conn = this.org.getConnection();
@@ -79,6 +78,7 @@ export default class Retriever extends SfdxCommand {
       languageCode,
     ]);
 
+    // read translations from local
     let localTranslationsJSON;
     if (x2jParser.validate(translationsXMLData) === true) {
       localTranslationsJSON = x2jParser.parse(translationsXMLData, x2jOptions);
@@ -95,11 +95,15 @@ export default class Retriever extends SfdxCommand {
       },
     };
 
+    // merge translations
     for (const key in localTranslationsJSON.Translations) {
-      const transItems = localTranslationsJSON.Translations[key];
+      let transItems = localTranslationsJSON.Translations[key];
       let rTransItems = retrievedTranslationsJSON.Translations[key];
       if (rTransItems && !Array.isArray(rTransItems)) {
         rTransItems = [rTransItems];
+      }
+      if (key !== "@" && isObject(transItems)) {
+        transItems = [transItems];
       }
       if (Array.isArray(transItems)) {
         let mergedItems = [];
@@ -129,6 +133,7 @@ export default class Retriever extends SfdxCommand {
             }
           }
         }
+        // sort
         localTranslationsJSON.Translations[key] = mergedItems.sort((a, b) => {
           if (a.name && b.name) {
             return a.name > b.name ? 1 : -1;
