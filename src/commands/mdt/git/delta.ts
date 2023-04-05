@@ -12,6 +12,7 @@ import {
   writeFile,
   copyFile,
   copyFolderRecursive,
+  rmRecursive,
 } from "../../../utils/utilities";
 import {
   gitShow,
@@ -121,13 +122,13 @@ export default class Differ extends SfdxCommand {
         /** handle lwc components */
         case `${FMD_FOLDER}/lwc`:
           if (folderPath !== `${FMD_FOLDER}/lwc`) {
-            const lwcFileNames = fs.readdirSync(`${folderPath}`);
-            for (const lwcFileName of lwcFileNames) {
-              await copyFile(
-                `${folderPath}/${lwcFileName}`,
-                `${packagedir}/${folderPath}/${lwcFileName}`
-              );
-            }
+            let metadataTypeFolderPath: string = substringBeforeNthChar(
+              metadataFilePath,
+              "/",
+              5
+            );
+            copyFolderRecursive(metadataTypeFolderPath,`${packagedir}/${metadataTypeFolderPath}`)
+            rmRecursive(`${packagedir}/${metadataTypeFolderPath}/__tests__`) // __tests__ ignored
           }
           break;
         /** handle experience bundles */
@@ -220,7 +221,7 @@ export default class Differ extends SfdxCommand {
             );
             await copyFolderRecursive(
               `${staticResourceFolder}/${resourceFolderName}`,
-              `${packagedir}/${staticResourceFolder}`
+              `${packagedir}/${staticResourceFolder}/${resourceFolderName}`
             );
           } else {
             // static resource of type file
