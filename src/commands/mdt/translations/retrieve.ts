@@ -77,7 +77,7 @@ export default class Retriever extends SfdxCommand {
           if (a.name && b.name) {
             return a.name > b.name ? 1 : -1;
           }
-          if (a.fullNtransItemsame && b.fullName) {
+          if (a.fullName && b.fullName) {
             return a.fullName > b.fullName ? 1 : -1;
           }
         });
