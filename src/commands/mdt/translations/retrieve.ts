@@ -1,16 +1,7 @@
 import { flags, SfdxCommand } from "@salesforce/command";
 import { AnyJson } from "@salesforce/ts-types";
 import * as chalk from "chalk";
-import * as path from "path";
-import { j2xParser } from "fast-xml-parser";
-
-import {
-  substringBefore,
-  writeXMLFile,
-  escapeXML,
-} from "../../../utils/utilities";
-
-import { j2xOptions } from "../../../config/fastXMLOptions";
+import { ComponentSet } from '@salesforce/source-deploy-retrieve'
 
 export default class Retriever extends SfdxCommand {
   public static examples = [
@@ -52,48 +43,20 @@ export default class Retriever extends SfdxCommand {
   }
 
   public async retrieve(sourcepath: string, outputdir: string) {
-    // escape xml
-    j2xOptions.tagValueProcessor = (a) => escapeXML(a.toString());
-    const json2xmlParser = new j2xParser(j2xOptions);
     const conn = this.org.getConnection();
-    const languageCode: string = substringBefore(
-      path.basename(sourcepath),
-      "."
-    );
-    const destpath: string = outputdir
-      ? `${outputdir}/${languageCode}.translation-meta.xml`
-      : sourcepath;
+    // retrieve the metadata
+    const retrieve = await ComponentSet
+      .fromSource(sourcepath)
+      .retrieve({
+        // @ts-ignore
+        usernameOrConnection: conn,
+        // default location if retrieved component doesn't match with one in set
+        output: './',
+        merge: true
+      });
+    retrieve.onUpdate(({ status }) => console.log(`Status: ${status}`));
+    // Wait for polling to finish and get the RetrieveResult object
+    await retrieve.pollStatus();
 
-    // read translations from org
-    const translationsJSON = await conn.metadata.readSync("Translations", [
-      languageCode,
-    ]);
-
-    // sort
-    for (const key in translationsJSON) {
-      const transItems = translationsJSON[key];
-      if (Array.isArray(transItems)) {
-        translationsJSON[key] = transItems.sort((a, b) => {
-          if (a.name && b.name) {
-            return a.name > b.name ? 1 : -1;
-          }
-          if (a.fullName && b.fullName) {
-            return a.fullName > b.fullName ? 1 : -1;
-          }
-        });
-      }
-    }
-
-    const formattedXml: string = json2xmlParser.parse({
-      Translations: {
-        "@": {
-          xmlns: "http://soap.sforce.com/2006/04/metadata",
-        },
-        ...translationsJSON,
-      },
-    });
-
-    // write xml file
-    await writeXMLFile(`${destpath}`, formattedXml);
   }
 }

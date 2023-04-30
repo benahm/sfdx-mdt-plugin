@@ -10,9 +10,11 @@
     "@oclif/errors": "^1",
     "@salesforce/command": "^2",
     "@salesforce/core": "^2",
+    "@salesforce/source-deploy-retrieve": "^8.0.4",
     "adm-zip": "^0.5.1",
     "chalk": "^4.1.0",
-    "fast-xml-parser": "^3.17.4"
+    "fast-xml-parser": "^3.17.4",
+    "fxp4": "npm:fast-xml-parser@^4.2.2"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",

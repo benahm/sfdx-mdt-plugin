@@ -2,19 +2,23 @@ import { flags, SfdxCommand } from "@salesforce/command";
 import { AnyJson } from "@salesforce/ts-types";
 import * as chalk from "chalk";
 import * as path from "path";
-import * as x2jParser from "fast-xml-parser";
-import { j2xParser } from "fast-xml-parser";
+import { XMLParser, XMLBuilder } from "fxp4";
+import { ComponentSet } from '@salesforce/source-deploy-retrieve'
 
 import {
   substringBefore,
   readFile,
   writeXMLFile,
-  escapeXML,
-  unescapeXML,
-  isObject,
 } from "../../../utils/utilities";
 
-import { j2xOptions, x2jOptions } from "../../../config/fastXMLOptions";
+const options = {
+  ignoreDeclaration: true,
+  ignoreAttributes: false,
+  preserveOrder: true,
+  trimValues: false,
+  commentPropName: "#comment",
+  suppressEmptyNode: true
+};
 
 export default class Retriever extends SfdxCommand {
   public static examples = [
@@ -56,15 +60,20 @@ export default class Retriever extends SfdxCommand {
   }
 
   public async retrieve(sourcepath: string, outputdir: string) {
-    // escape xml
-    j2xOptions.tagValueProcessor = (a) => escapeXML(a.toString());
 
-    // unescape xml
-    x2jOptions.tagValueProcessor = (a) => unescapeXML(a.toString());
 
-    const json2xmlParser = new j2xParser(j2xOptions);
-    const translationsXMLData: string = await readFile(sourcepath);
-    const conn = this.org.getConnection();
+    const xmlParser = new XMLParser(options);
+    const xmlBuilder = new XMLBuilder(options);
+    const localTranslationsXMLData: string = await readFile(sourcepath);
+
+    // read translations from local
+    let localTranslationsJSON;
+    try {
+      localTranslationsJSON = xmlParser.parse(localTranslationsXMLData);
+    } catch (err) {
+      throw `${sourcepath} is an invalid xml file`;
+    }
+
     const languageCode: string = substringBefore(
       path.basename(sourcepath),
       "."
@@ -73,81 +82,91 @@ export default class Retriever extends SfdxCommand {
       ? `${outputdir}/${languageCode}.translation-meta.xml`
       : sourcepath;
 
-    // read translations from org
-    const translationsJSON = await conn.metadata.readSync("Translations", [
-      languageCode,
-    ]);
+    const conn = this.org.getConnection();
+    // retrieve the metadata
+    const retrieve = await ComponentSet
+      .fromSource(sourcepath)
+      .retrieve({
+        // @ts-ignore
+        usernameOrConnection: conn,
+        // default location if retrieved component doesn't match with one in set
+        output: './',
+        merge: true
+      });
+    retrieve.onUpdate(({ status }) => console.log(`Status: ${status}`));
+    // Wait for polling to finish and get the RetrieveResult object
+    await retrieve.pollStatus();
 
-    // read translations from local
-    let localTranslationsJSON;
-    if (x2jParser.validate(translationsXMLData) === true) {
-      localTranslationsJSON = x2jParser.parse(translationsXMLData, x2jOptions);
-    } else {
+    const retrievedTranslationsXMLData: string = await readFile(sourcepath);
+    // read translations from retrieved metadata
+    let retrievedTranslationsJSON;
+    try {
+      retrievedTranslationsJSON = xmlParser.parse(retrievedTranslationsXMLData);
+    } catch (err) {
       throw `${sourcepath} is an invalid xml file`;
     }
 
-    const retrievedTranslationsJSON = {
-      Translations: {
-        "@": {
-          xmlns: "http://soap.sforce.com/2006/04/metadata",
-        },
-        ...translationsJSON,
-      },
-    };
+    // prepare merged translations
+    let mergedTranslationsJSON = [{
+      Translations: [],
+      ":@": {
+        "@_xmlns": "http://soap.sforce.com/2006/04/metadata"
+      }
+    }];
 
     // merge translations
-    for (const key in localTranslationsJSON.Translations) {
-      let transItems = localTranslationsJSON.Translations[key];
-      let rTransItems = retrievedTranslationsJSON.Translations[key];
-      if (rTransItems && !Array.isArray(rTransItems)) {
-        rTransItems = [rTransItems];
-      }
-      if (key !== "@" && isObject(transItems)) {
-        transItems = [transItems];
-      }
-      if (Array.isArray(transItems)) {
-        let mergedItems = [];
-        for (const transItem of transItems) {
-          const itemFound = rTransItems?.find((item) => {
-            return (
-              (item.name && item.name === transItem.name) ||
-              (item.fullName && item.fullName == transItem.fullName)
-            );
-          });
-          if (itemFound) {
-            mergedItems.push(itemFound);
-          } else {
-            mergedItems.push(transItem);
-          }
+    for (const transItem of localTranslationsJSON[0].Translations) {
+      let name = this.extractTranslationAPIName(transItem);
+      if (name) {
+        const retrievedTransItem = this.findTransItemByAPIName(retrievedTranslationsJSON[0].Translations, name)
+        if (retrievedTransItem) {
+          mergedTranslationsJSON[0].Translations.push(retrievedTransItem);
+        } else {
+          mergedTranslationsJSON[0].Translations.push(transItem);
         }
-        if (rTransItems) {
-          for (const transItem of rTransItems) {
-            const itemFound = mergedItems.find((item) => {
-              return (
-                (item.name && item.name === transItem.name) ||
-                (item.fullName && item.fullName == transItem.fullName)
-              );
-            });
-            if (!itemFound) {
-              mergedItems.push(transItem);
-            }
-          }
-        }
-        // sort
-        localTranslationsJSON.Translations[key] = mergedItems.sort((a, b) => {
-          if (a.name && b.name) {
-            return a.name > b.name ? 1 : -1;
-          }
-          if (a.fullName && b.fullName) {
-            return a.fullName > b.fullName ? 1 : -1;
-          }
-        });
+      } else {
+        mergedTranslationsJSON[0].Translations.push(transItem);
       }
+
     }
 
-    const formattedXml: string = json2xmlParser.parse(localTranslationsJSON);
-
     // write xml file
-    await writeXMLFile(`${destpath}`, formattedXml);
+    await writeXMLFile(`${destpath}`, xmlBuilder.build(mergedTranslationsJSON));
   }
+
+  /**
+   * extract the translations API Name (ex name for Custom Label & fullName for a flow definition)
+   * see https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_translations.htm
+   * @param transItem 
+   * @returns api name for a translation
+   */
+  private extractTranslationAPIName(transItem) {
+    const key = Object.keys(transItem)[0];
+    if (key.startsWith("#")) {
+      return null;
+    }
+    const transNodeContent = transItem[key];
+    const nameNode = transNodeContent.find(item => item.hasOwnProperty("name") || item.hasOwnProperty("fullName"));
+    if (!nameNode) return null
+    if (nameNode.name) {
+      return nameNode.name[0]['#text']
+    }
+    return nameNode.fullName[0]['#text']
+  }
+
+  /**
+   * find the translation item by api name
+   * @param tranlations 
+   * @param apiName 
+   * @returns 
+   */
+  private findTransItemByAPIName(tranlations, apiName) {
+    for (const transItem of tranlations) {
+      if (apiName == this.extractTranslationAPIName(transItem)) {
+        return transItem
+      }
+    }
+  }
+
 }
+
