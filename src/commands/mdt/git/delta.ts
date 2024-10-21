@@ -179,6 +179,7 @@ export default class Differ extends SfdxCommand {
                   "active",
                   "label",
                   "businessProcess",
+                  "compactLayoutAssignment",
                 ],
               },
               `${packagedir}`
