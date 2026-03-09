@@ -241,27 +241,69 @@ const copyFile = async (
  * @param source
  * @param target
  */
-const copyFolderRecursive = async (source, target) => {
-  let files = [];
-
-  // Check if folder needs to be created or integrated
-  const targetFolder = path.join(target, path.basename(source));
-  if (!fs.existsSync(targetFolder)) {
-    fs.mkdirSync(targetFolder);
+const copyFolderRecursive =  (sourceDir: string, destDir: string): void => {
+  // Create the destination folder if it doesn't exist
+  if (!fs.existsSync(destDir)) {
+    fs.mkdirSync(destDir);
   }
 
-  // Copy
-  if (fs.lstatSync(source).isDirectory()) {
-    files = fs.readdirSync(source);
-    for (const file of files) {
-      const curSource = path.join(source, file);
-      if (fs.lstatSync(curSource).isDirectory()) {
-        await copyFolderRecursive(curSource, targetFolder);
-      } else {
-        await copyFile(curSource, targetFolder + "/" + file);
-      }
+  // Get a list of all files and folders in the source directory
+  const files = fs.readdirSync(sourceDir);
+
+  // Loop through the files and folders, copying them to the destination folder
+  for (const file of files) {
+    const sourcePath = path.join(sourceDir, file);
+    const destPath = path.join(destDir, file);
+
+    // Check if the current file is a directory
+    const isDir = fs.statSync(sourcePath).isDirectory();
+
+    if (isDir) {
+      // Recursively copy subdirectories
+      copyFolderRecursive(sourcePath, destPath);
+    } else {
+      // Copy the file to the destination folder
+      fs.copyFileSync(sourcePath, destPath);
     }
   }
+};
+
+
+/**
+ * escape xml
+ * @param value
+ * @returns
+ */
+const escapeXML = (value: string): string => {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+};
+
+/**
+ * unescape xml
+ * @param value
+ * @returns
+ */
+const unescapeXML = (value: string): string => {
+  return value
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'");
+};
+
+/**
+ * check if a value is an object
+ * @param value
+ * @returns
+ */
+const isObject = (value): boolean => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 };
 
 export {
@@ -279,4 +321,7 @@ export {
   writeXMLFile,
   copyFile,
   copyFolderRecursive,
+  escapeXML,
+  unescapeXML,
+  isObject,
 };
