@@ -1,7 +1,17 @@
-# sfdx-mdt-plugin
+# ⛔ DEPRECATED — use [sf-df](https://github.com/benahm/sf-df)
 
-> ⚠️ **DEPRECATED** — This plugin is no longer maintained.
-> Please use **[sf-df](https://github.com/benahm/sf-df)** instead.
+> [!CAUTION]
+> **This plugin is deprecated, archived and no longer maintained.**
+>
+> ## 👉 Use **[sf-df](https://github.com/benahm/sf-df)** instead
+>
+> **https://github.com/benahm/sf-df**
+>
+> No further updates or fixes will be made to `sfdx-mdt-plugin`.
+
+---
+
+# sfdx-mdt-plugin (legacy documentation)
 
 [![Version](https://img.shields.io/npm/v/sfdx-mdt-plugin.svg)](https://npmjs.org/package/sfdx-mdt-plugin)
 [![Appveyor CI](https://ci.appveyor.com/api/projects/status/github/Repositories/sfdx-mdt-plugin?branch=master&svg=true)](https://ci.appveyor.com/project/heroku/sfdx-mdt-plugin/branch/master)
